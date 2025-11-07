@@ -17,10 +17,30 @@ body {
   margin: 0;
   background: linear-gradient(145deg, #0b0b10, #131321);
   color: #fff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.hero {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  background: linear-gradient(145deg, #0b0b10, #131321);
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://via.placeholder.com/1920x1080/0b0b10/00ffff?text=Document+Creator') no-repeat center center;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: -1;
 }
 
 .container {
@@ -121,64 +141,227 @@ h1 {
   color: #fff;
   box-shadow: 0 0 8px #00ffff;
 }
+
+.section {
+  padding: 80px 0;
+  background: linear-gradient(145deg, #131321, #0b0b10);
+}
+
+.section:nth-child(even) {
+  background: linear-gradient(145deg, #0b0b10, #131321);
+}
+
+.section h2 {
+  font-size: 2.5rem;
+  color: #aaf2ff;
+  margin-bottom: 20px;
+}
+
+.section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #ccc;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-10px);
+}
+
+.feature h3 {
+  color: #00ffff;
+  margin-bottom: 10px;
+}
+
+.footer {
+  padding: 40px 0;
+  background: #0b0b10;
+  text-align: center;
+  color: #aaa;
+}
+
+.footer a {
+  color: #00ffff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(90deg, #3a00ff, #ff00e6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #8a2be2;
+  transition: all 0.3s ease;
+  font-size: 1.5rem;
+  display: none;
+}
+
+.scroll-to-top:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .section h2 {
+    font-size: 2rem;
+  }
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1><span class="highlight">Modern</span> Document Creator</h1>
-  
-  <div class="toolbar">
-    <button id="boldBtn" class="btn">Bold / Font</button>
-    <button id="italicBtn" class="btn">Italic / Style</button>
-    <button id="underlineBtn" class="btn">Underline</button>
-    <button id="saveBtn" class="btn">Save</button>
-    <button id="loadBtn" class="btn">Make Resume</button>
-    <select id="templateSelect" class="template-select">
-      <option>Choose Template</option>
-      <option value="agreement">Agreement</option>
-      <!-- Add more options here if needed -->
-    </select>
-  </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1><span class="highlight">Modern</span> Document Creator</h1>
+      
+      <div class="toolbar">
+        <button id="boldBtn" class="btn">Bold / Font</button>
+        <button id="italicBtn" class="btn">Italic / Style</button>
+        <button id="underlineBtn" class="btn">Underline</button>
+        <button id="saveBtn" class="btn">Save</button>
+        <button id="loadBtn" class="btn">Make Resume</button>
+        <select id="templateSelect" class="template-select">
+          <option>Choose Template</option>
+          <option value="agreement">Agreement</option>
+          <!-- Add more options here if needed -->
+        </select>
+      </div>
 
-  <select id="fontSelector" class="font-selector">
-    <option value="Poppins">Poppins (Default)</option>
-    <option value="Roboto">Roboto</option>
-    <option value="Playfair Display">Playfair Display</option>
-    <option value="Courier Prime">Courier Prime</option>
-    <option value="Arial">Arial</option>
-    <option value="Georgia">Georgia</option>
-    <option value="Times New Roman">Times New Roman</option>
-  </select>
+      <select id="fontSelector" class="font-selector">
+        <option value="Poppins">Poppins (Default)</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Playfair Display">Playfair Display</option>
+        <option value="Courier Prime">Courier Prime</option>
+        <option value="Arial">Arial</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+      </select>
 
-  <select id="italicSelector" class="italic-selector">
-    <option value="italic">Normal Italic</option>
-    <option value="'Dancing Script', cursive">Dancing Script</option>
-    <option value="'Indie Flower', cursive">Indie Flower</option>
-    <option value="'Great Vibes', cursive">Great Vibes</option>
-    <option value="'Kaushan Script', cursive">Kaushan Script</option>
-  </select>
+      <select id="italicSelector" class="italic-selector">
+        <option value="italic">Normal Italic</option>
+        <option value="'Dancing Script', cursive">Dancing Script</option>
+        <option value="'Indie Flower', cursive">Indie Flower</option>
+        <option value="'Great Vibes', cursive">Great Vibes</option>
+        <option value="'Kaushan Script', cursive">Kaushan Script</option>
+      </select>
 
-  <select id="underlineSelector" class="underline-selector">
-    <option value="none">No Underline</option>
-    <option value="underline">Single Underline</option>
-    <option value="underline double">Double Underline</option>
-    <option value="underline dotted">Dotted Underline</option>
-    <option value="underline dashed">Dashed Underline</option>
-    <option value="underline wavy">Wavy Underline</option>
-  </select>
+      <select id="underlineSelector" class="underline-selector">
+        <option value="none">No Underline</option>
+        <option value="underline">Single Underline</option>
+        <option value="underline double">Double Underline</option>
+        <option value="underline dotted">Dotted Underline</option>
+        <option value="underline dashed">Dashed Underline</option>
+        <option value="underline wavy">Wavy Underline</option>
+      </select>
 
-  <div class="editor">
-    <textarea id="editor" placeholder="Start creating your document here..."></textarea>
-  </div>
+      <div class="editor">
+        <textarea id="editor" placeholder="Start creating your document here..."></textarea>
+      </div>
 
-  <div class="template-buttons">
-    <button class="template-btn">Resume Template</button>
-    <button class="template-btn">Invoice Template</button>
-    <button class="template-btn">Note Template</button>
-    <button class="template-btn">Rental Agreement Template</button>
-    <button class="template-btn">Full Agreement Template</button>
-  </div>
-</div>
+      <div class="template-buttons">
+        <button class="template-btn">Resume Template</button>
+        <button class="template-btn">Invoice Template</button>
+        <button class="template-btn">Note Template</button>
+        <button class="template-btn">Rental Agreement Template</button>
+        <button class="template-btn">Full Agreement Template</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to Use Section -->
+  <section class="section">
+    <div class="container">
+      <h2>How to Use</h2>
+      <p>Follow these simple steps to create your perfect document.</p>
+      <div class="features">
+        <div class="feature">
+          <h3>Step 1: Choose a Template</h3>
+          <p>Select from our library of templates or start from scratch.</p>
+        </div>
+        <div class="feature">
+          <h3>Step 2: Customize</h3>
+          <p>Use the toolbar to apply fonts, styles, and underlines.</p>
+        </div>
+        <div class="feature">
+          <h3>Step 3: Edit</h3>
+          <p>Type or paste your content in the editor.</p>
+        </div>
+        <div class="feature">
+          <h3>Step 4: Save</h3>
+          <p>Click save to download your document as a text file.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terms and Conditions Section -->
+  <section class="section">
+    <div class="container">
+      <h2>Terms and Conditions</h2>
+      <p>Please read our terms carefully before using the service.</p>
+      <div class="features">
+        <div class="feature">
+          <h3>Usage Policy</h3>
+          <p>This tool is for personal and professional document creation. Misuse is prohibited.</p>
+        </div>
+        <div class="feature">
+          <h3>Data Privacy</h3>
+          <p>Your documents are processed locally. We do not store any data.</p>
+        </div>
+        <div class="feature">
+          <h3>Liability</h3>
+          <p>We are not responsible for any misuse or legal issues arising from created documents.</p>
+        </div>
+        <div class="feature">
+          <h3>Contact</h3>
+          <p>For questions, reach out via our support channels.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Powered by <a href="https://github.com" target="_blank">GitHub</a> | Enhance your documents effortlessly!</p>
+      <p>&copy; 2023 Modern Document Creator. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollToTop" class="scroll-to-top">↑</button>
 
 <script>
 const boldBtn = document.getElementById('boldBtn');
@@ -191,6 +374,7 @@ const fontSelector = document.getElementById('fontSelector');
 const italicSelector = document.getElementById('italicSelector');
 const underlineSelector = document.getElementById('underlineSelector');
 const editor = document.getElementById('editor');
+const scrollToTopBtn = document.getElementById('scrollToTop');
 
 // Toggle selectors
 boldBtn.addEventListener('click', () => {
@@ -280,6 +464,19 @@ saveBtn.addEventListener('click', () => {
 // ✅ MAKE RESUME BUTTON (opens your GitHub load.html page)
 loadBtn.addEventListener('click', () => {
   window.location.href = "load.html"; // ← replace with your actual GitHub link
+});
+
+// Scroll to top functionality
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) {
+    scrollToTopBtn.style.display = 'block';
+  } else {
+    scrollToTopBtn.style.display = 'none';
+  }
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 </script>
 </body>
