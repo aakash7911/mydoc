@@ -133,8 +133,10 @@ h1 {
     <button id="underlineBtn" class="btn">Underline</button>
     <button id="saveBtn" class="btn">Save</button>
     <button id="loadBtn" class="btn">Make Resume</button>
-    <select class="template-select">
+    <select id="templateSelect" class="template-select">
       <option>Choose Template</option>
+      <option value="agreement">Agreement</option>
+      <!-- Add more options here if needed -->
     </select>
   </div>
 
@@ -184,6 +186,7 @@ const italicBtn = document.getElementById('italicBtn');
 const underlineBtn = document.getElementById('underlineBtn');
 const saveBtn = document.getElementById('saveBtn');
 const loadBtn = document.getElementById('loadBtn');
+const templateSelect = document.getElementById('templateSelect');
 const fontSelector = document.getElementById('fontSelector');
 const italicSelector = document.getElementById('italicSelector');
 const underlineSelector = document.getElementById('underlineSelector');
@@ -239,6 +242,17 @@ underlineSelector.addEventListener('change', () => {
     editor.style.textDecorationStyle = style;
   }
   underlineSelector.style.display = 'none';
+});
+
+// Handle template selection
+templateSelect.addEventListener('change', () => {
+  const selectedValue = templateSelect.value;
+  if (selectedValue === 'agreement') {
+    // Replace 'https://yourusername.github.io/yourrepo/agreement.html' with your actual GitHub Pages URL
+    window.location.href ="agreement.html"; // ← Yahan apna GitHub link dalen
+  }
+  // Add more cases for other templates if needed
+  templateSelect.selectedIndex = 0; // Reset to default after selection
 });
 
 // ✅ SAVE FUNCTION
