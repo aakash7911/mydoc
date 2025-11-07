@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agreement Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .agreement-output {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+        }
+        .agreement-output h2 {
+            color: #007bff;
+        }
+        .signature-section {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .signature-line {
+            border-bottom: 1px solid #000;
+            width: 200px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .btn-generate {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-generate:hover {
+            background-color: #218838;
+        }
+        .btn-download {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-download:hover {
+            background-color: #0056b3;
+        }
+        .download-options {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Agreement Generator</h1>
+        <form id="agreementForm">
+            <div class="form-section">
+                <h3>Agreement Details</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="title" class="form-label">Agreement Title</label>
+                        <input type="text" class="form-control" id="title" placeholder="e.g. Service Agreement" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Party A (First Party)</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="partyA_name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="partyA_name" placeholder="Enter full name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="partyA_address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="partyA_address" placeholder="Enter address" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="partyA_contact" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="partyA_contact" placeholder="Enter contact number" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="partyA_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="partyA_email" placeholder="Enter email" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Party B (Second Party)</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="partyB_name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="partyB_name" placeholder="Enter full name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="partyB_address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="partyB_address" placeholder="Enter address" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="partyB_contact" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="partyB_contact" placeholder="Enter contact number" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="partyB_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="partyB_email" placeholder="Enter email" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Agreement Terms</h3>
+                <textarea class="form-control" id="terms" rows="5" placeholder="Describe the terms and conditions of the agreement" required></textarea>
+            </div>
+
+            <div class="form-section">
+                <h3>Additional Clauses</h3>
+                <textarea class="form-control" id="clauses" rows="4" placeholder="Add any additional clauses or notes" required></textarea>
+            </div>
+
+            <button type="button" class="btn-generate" onclick="generateAgreement()">Generate Agreement</button>
+        </form>
+
+        <div class="agreement-output" id="agreementOutput">
+            <h2 id="agreementTitle"></h2>
+            <p><strong>Date:</strong> <span id="agreementDate"></span></p>
+            <h3>Parties Involved</h3>
+            <p><strong>Party A (First Party):</strong></p>
+            <p>Name: <span id="partyAName"></span></p>
+            <p>Address: <span id="partyAAddress"></span></p>
+            <p>Contact: <span id="partyAContact"></span> | Email: <span id="partyAEmail"></span></p>
+            <p><strong>Party B (Second Party):</strong></p>
+            <p>Name: <span id="partyBName"></span></p>
+            <p>Address: <span id="partyBAddress"></span></p>
+            <p>Contact: <span id="partyBContact"></span> | Email: <span id="partyBEmail"></span></p>
+            <h3>Terms and Conditions</h3>
+            <p id="agreementTerms"></p>
+            <h3>Additional Clauses</h3>
+            <p id="agreementClauses"></p>
+            <div class="signature-section">
+                <h3>Signatures</h3>
+                <p>Party A Signature: <span class="signature-line"></span></p>
+                <p>Date: <span class="signature-line"></span></p>
+                <p>Party B Signature: <span class="signature-line"></span></p>
+                <p>Date: <span class="signature-line"></span></p>
+            </div>
+        </div>
+        <div class="download-options" id="downloadOptions">
+            <label for="sizeSelect" class="form-label">Choose Download Size:</label>
+            <select class="form-select" id="sizeSelect">
+                <option value="1">Small (Low Resolution)</option>
+                <option value="2" selected>Medium (Standard Resolution)</option>
+                <option value="3">Large (High Resolution)</option>
+            </select>
+            <button type="button" class="btn-download" onclick="downloadAgreement()">Download as PNG</button>
+        </div>
+    </div>
+
+    <script>
+        function generateAgreement() {
+            document.getElementById('agreementTitle').textContent = document.getElementById('title').value;
+            document.getElementById('agreementDate').textContent = document.getElementById('date').value;
+            document.getElementById('partyAName').textContent = document.getElementById('partyA_name').value;
+            document.getElementById('partyAAddress').textContent = document.getElementById('partyA_address').value;
+            document.getElementById('partyAContact').textContent = document.getElementById('partyA_contact').value;
+            document.getElementById('partyAEmail').textContent = document.getElementById('partyA_email').value;
+            document.getElementById('partyBName').textContent = document.getElementById('partyB_name').value;
+            document.getElementById('partyBAddress').textContent = document.getElementById('partyB_address').value;
+            document.getElementById('partyBContact').textContent = document.getElementById('partyB_contact').value;
+            document.getElementById('partyBEmail').textContent = document.getElementById('partyB_email').value;
+            document.getElementById('agreementTerms').textContent = document.getElementById('terms').value;
+            document.getElementById('agreementClauses').textContent = document.getElementById('clauses').value;
+
+            document.getElementById('agreementOutput').style.display = 'block';
+            document.getElementById('downloadOptions').style.display = 'block';
+        }
+
+        function downloadAgreement() {
+            const element = document.getElementById('agreementOutput');
+            const scale = parseInt(document.getElementById('sizeSelect').value);
+            html2canvas(element, {
+                backgroundColor: '#ffffff', // Ensure white background
+                scale: scale // Use selected scale for resolution
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'agreement.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
