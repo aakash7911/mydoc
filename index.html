@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Document Creator</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Playfair+Display:wght@500&family=Courier+Prime&family=Dancing+Script&family=Indie+Flower&family=Great+Vibes&family=Kaushan+Script&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(145deg, #0b0b10, #131321);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #aaf2ff;
+  text-shadow: 0 0 15px #00ffff;
+}
+
+.highlight {
+  color: #00ffff;
+}
+
+.toolbar {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn {
+  background: linear-gradient(90deg, #3a00ff, #ff00e6);
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #8a2be2;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.template-select {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #111122;
+  color: #fff;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.editor textarea {
+  width: 100%;
+  height: 300px;
+  background: #0d0d14;
+  color: #ccc;
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  transition: font-family 0.3s ease;
+}
+
+.template-buttons {
+  margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.template-btn {
+  background: #2d2d3a;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
+  color: #ddd;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00ffff33;
+}
+
+.template-btn:hover {
+  background: #363648;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+.font-selector, .italic-selector, .underline-selector {
+  display: none;
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #111122;
+  color: #fff;
+  box-shadow: 0 0 8px #00ffff;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1><span class="highlight">Modern</span> Document Creator</h1>
+  
+  <div class="toolbar">
+    <button id="boldBtn" class="btn">Bold / Font</button>
+    <button id="italicBtn" class="btn">Italic / Style</button>
+    <button id="underlineBtn" class="btn">Underline</button>
+    <button id="saveBtn" class="btn">Save</button>
+    <button id="loadBtn" class="btn">Load</button>
+    <select class="template-select">
+      <option>Choose Template</option>
+    </select>
+  </div>
+
+  <select id="fontSelector" class="font-selector">
+    <option value="Poppins">Poppins (Default)</option>
+    <option value="Roboto">Roboto</option>
+    <option value="Playfair Display">Playfair Display</option>
+    <option value="Courier Prime">Courier Prime</option>
+    <option value="Arial">Arial</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Times New Roman">Times New Roman</option>
+  </select>
+
+  <select id="italicSelector" class="italic-selector">
+    <option value="italic">Normal Italic</option>
+    <option value="'Dancing Script', cursive">Dancing Script</option>
+    <option value="'Indie Flower', cursive">Indie Flower</option>
+    <option value="'Great Vibes', cursive">Great Vibes</option>
+    <option value="'Kaushan Script', cursive">Kaushan Script</option>
+  </select>
+
+  <select id="underlineSelector" class="underline-selector">
+    <option value="none">No Underline</option>
+    <option value="underline">Single Underline</option>
+    <option value="underline double">Double Underline</option>
+    <option value="underline dotted">Dotted Underline</option>
+    <option value="underline dashed">Dashed Underline</option>
+    <option value="underline wavy">Wavy Underline</option>
+  </select>
+
+  <div class="editor">
+    <textarea id="editor" placeholder="Start creating your document here..."></textarea>
+  </div>
+
+  <div class="template-buttons">
+    <button class="template-btn">Resume Template</button>
+    <button class="template-btn">Invoice Template</button>
+    <button class="template-btn">Note Template</button>
+    <button class="template-btn">Rental Agreement Template</button>
+    <button class="template-btn">Full Agreement Template</button>
+  </div>
+</div>
+
+<script>
+const boldBtn = document.getElementById('boldBtn');
+const italicBtn = document.getElementById('italicBtn');
+const underlineBtn = document.getElementById('underlineBtn');
+const saveBtn = document.getElementById('saveBtn');
+const fontSelector = document.getElementById('fontSelector');
+const italicSelector = document.getElementById('italicSelector');
+const underlineSelector = document.getElementById('underlineSelector');
+const editor = document.getElementById('editor');
+
+// Toggle selectors
+boldBtn.addEventListener('click', () => {
+  fontSelector.style.display = fontSelector.style.display === 'block' ? 'none' : 'block';
+  italicSelector.style.display = 'none';
+  underlineSelector.style.display = 'none';
+});
+italicBtn.addEventListener('click', () => {
+  italicSelector.style.display = italicSelector.style.display === 'block' ? 'none' : 'block';
+  fontSelector.style.display = 'none';
+  underlineSelector.style.display = 'none';
+});
+underlineBtn.addEventListener('click', () => {
+  underlineSelector.style.display = underlineSelector.style.display === 'block' ? 'none' : 'block';
+  fontSelector.style.display = 'none';
+  italicSelector.style.display = 'none';
+});
+
+// Apply font family
+fontSelector.addEventListener('change', () => {
+  editor.style.fontFamily = fontSelector.value;
+  fontSelector.style.display = 'none';
+});
+
+// Apply italic style
+italicSelector.addEventListener('change', () => {
+  const font = italicSelector.value;
+  if (font === 'italic') {
+    editor.style.fontStyle = 'italic';
+    editor.style.fontFamily = 'Poppins';
+  } else {
+    editor.style.fontFamily = font;
+    editor.style.fontStyle = 'normal';
+  }
+  italicSelector.style.display = 'none';
+});
+
+// Apply underline
+underlineSelector.addEventListener('change', () => {
+  const value = underlineSelector.value;
+  if (value === 'none') {
+    editor.style.textDecoration = 'none';
+  } else if (value === 'underline') {
+    editor.style.textDecoration = 'underline';
+    editor.style.textDecorationStyle = 'solid';
+  } else {
+    const [type, style] = value.split(' ');
+    editor.style.textDecoration = type;
+    editor.style.textDecorationStyle = style;
+  }
+  underlineSelector.style.display = 'none';
+});
+
+// ✅ FIXED SAVE FUNCTION (works in all browsers)
+saveBtn.addEventListener('click', () => {
+  const text = editor.value.trim();
+  if (!text) {
+    alert("Please write something before saving!");
+    return;
+  }
+
+  try {
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'MyDocument.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  } catch (err) {
+    alert("Download failed: " + err.message);
+  }
+});
+</script>
+</body>
+</html>
