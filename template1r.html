@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Template 1</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #0b0b10, #131321);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .resume-container {
+            background: #1a1a2e;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+        h1 {
+            color: #aaf2ff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            color: #00ffff;
+            border-bottom: 2px solid #00ffff;
+            padding-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            background: #0d0d14;
+            color: #fff;
+            font-size: 1rem;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            background: linear-gradient(90deg, #3a00ff, #ff00e6);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .output {
+            display: none;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            background: #0d0d14;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #00ffff;
+        }
+        .download-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .download-section div {
+            margin-bottom: 10px;
+        }
+        .size-inputs {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <h1>Resume Builder - Template 1</h1>
+        <form id="resumeForm">
+            <div class="section">
+                <h2>Personal Information</h2>
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="tel" id="phone" placeholder="Phone Number" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="text" id="location" placeholder="Location" required>
+                <input type="url" id="linkedin" placeholder="LinkedIn Profile URL" required>
+            </div>
+            <div class="section">
+                <h2>Objective</h2>
+                <textarea id="objective" placeholder="Write your career objective here..." required></textarea>
+            </div>
+            <div class="section">
+                <h2>Experience</h2>
+                <textarea id="experience" placeholder="List your work experience here..." required></textarea>
+            </div>
+            <div class="section">
+                <h2>Education</h2>
+                <textarea id="education" placeholder="List your education details here..." required></textarea>
+            </div>
+            <div class="section">
+                <h2>Skills</h2>
+                <input type="text" id="skills" placeholder="List your skills (e.g., HTML, CSS, JavaScript)" required>
+            </div>
+            <div class="section">
+                <h2>Achievements</h2>
+                <textarea id="achievements" placeholder="List your achievements here..." required></textarea>
+            </div>
+            <button type="submit">Generate Resume</button>
+        </form>
+        <div class="output" id="resumeOutput"></div>
+        <div class="download-section" id="downloadSection">
+            <h2>Download Options</h2>
+            <div>
+                <label for="downloadType">Download Type:</label>
+                <select id="downloadType">
+                    <option value="png">PNG</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+            <div class="size-inputs" id="pngSize">
+                <label for="width">Width (px):</label>
+                <input type="number" id="width" value="800" min="100">
+                <label for="height">Height (px):</label>
+                <input type="number" id="height" value="600" min="100">
+            </div>
+            <div class="size-inputs" id="pdfSize">
+                <label for="pdfWidth">Width (mm):</label>
+                <input type="number" id="pdfWidth" value="210" min="50">
+                <label for="pdfHeight">Height (mm):</label>
+                <input type="number" id="pdfHeight" value="297" min="50">
+            </div>
+            <button id="downloadBtn">Download</button>
+        </div>
+    </div>
+
+    <!-- Include libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        document.getElementById('resumeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const location = document.getElementById('location').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const objective = document.getElementById('objective').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const skills = document.getElementById('skills').value;
+            const achievements = document.getElementById('achievements').value;
+
+            const resumeText = `
+${name}
+📞 ${phone} | ✉️ ${email}
+
+📍 ${location} | 🌐 ${linkedin}
+
+🎯 Objective
+
+${objective}
+
+💼 Experience
+
+${experience}
+
+🎓 Education
+
+${education}
+
+🧠 Skills
+
+${skills}
+
+🏆 Achievements
+
+${achievements}
+            `;
+
+            document.getElementById('resumeOutput').textContent = resumeText;
+            document.getElementById('resumeOutput').style.display = 'block';
+            document.getElementById('downloadSection').style.display = 'block';
+        });
+
+        // Toggle size inputs based on download type
+        document.getElementById('downloadType').addEventListener('change', function() {
+            const type = this.value;
+            document.getElementById('pngSize').style.display = type === 'png' ? 'block' : 'none';
+            document.getElementById('pdfSize').style.display = type === 'pdf' ? 'block' : 'none';
+        });
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const type = document.getElementById('downloadType').value;
+            const outputDiv = document.getElementById('resumeOutput');
+
+            // Temporarily change styles for white background and black text
+            const originalBg = outputDiv.style.background;
+            const originalColor = outputDiv.style.color;
+            outputDiv.style.background = 'white';
+            outputDiv.style.color = 'black';
+
+            if (type === 'png') {
+                const width = parseInt(document.getElementById('width').value);
+                const height = parseInt(document.getElementById('height').value);
+                html2canvas(outputDiv, { 
+                    width: width, 
+                    height: height, 
+                    backgroundColor: '#ffffff' 
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'resume.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    // Restore original styles
+                    outputDiv.style.background = originalBg;
+                    outputDiv.style.color = originalColor;
+                });
+            } else if (type === 'pdf') {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                const width = parseInt(document.getElementById('pdfWidth').value);
+                const height = parseInt(document.getElementById('pdfHeight').value);
+                pdf.html(outputDiv, {
+                    callback: function (pdf) {
+                        pdf.save('resume.pdf');
+                        // Restore original styles
+                        outputDiv.style.background = originalBg;
+                        outputDiv.style.color = originalColor;
+                    },
+                    x: 10,
+                    y: 10,
+                    width: width,
+                    height: height
+                });
+            }
+        });
+    </script>
+</body>
+</html>
