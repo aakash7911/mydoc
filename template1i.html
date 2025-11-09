@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Invoice Generator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 30px;
+  }
+  .invoice-box {
+    background: #fff;
+    padding: 25px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  th {
+    background: #f0f0f0;
+  }
+  .total {
+    text-align: right;
+    font-weight: bold;
+  }
+  input {
+    width: 90%;
+    padding: 5px;
+  }
+  #download-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    background: #007bff;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #download-btn:hover {
+    background: #0056b3;
+  }
+  #sizeControl {
+    text-align: center;
+    margin-top: 10px;
+  }
+  #sizeControl button {
+    margin: 5px;
+    padding: 8px 15px;
+    border: none;
+    background: #444;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #sizeControl button:hover {
+    background: #000;
+  }
+</style>
+</head>
+<body>
+
+<div class="invoice-box" id="invoice">
+  <h1> MY ITEMS LIST </h1>
+  
+  <p><strong>Date:</strong> <span id="today"></span></p>
+
+  <table id="items-table">
+    <tr>
+      <th>Item</th>
+      <th>Qty</th>
+      <th>Price (₹)</th>
+      <th>Total (₹)</th>
+    </tr>
+    <tr>
+      <td><input type="text" placeholder="Item Name"></td>
+      <td><input type="number" value="1" oninput="calculateTotal()"></td>
+      <td><input type="number" value="0" oninput="calculateTotal()"></td>
+      <td class="item-total">0</td>
+    </tr>
+  </table>
+
+  
+  <table>
+    <tr>
+      <td colspan="3" class="total">Subtotal</td>
+      <td id="subtotal">0</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="total">GST (%)</td>
+      <td><input type="number" id="gst" value="18" oninput="calculateTotal()"></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="total">Grand Total</td>
+      <td id="grandtotal"><strong>0</strong></td>
+    </tr>
+  </table>
+</div>
+
+<div id="sizeControl">
+  <button onclick="resizeInvoice('small')">Small</button>
+  <button onclick="resizeInvoice('normal')">Normal</button>
+  <button onclick="addRow()">+ Add Item</button>
+  <!--<button onclick="resizeInvoice('large')">Large</button>"-->
+</div>
+
+
+<button id="download-btn" onclick="downloadInvoice()">Download Invoice (PDF / PNG)</button>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  document.getElementById('today').innerText = new Date().toLocaleDateString();
+
+  function addRow() {
+    const table = document.getElementById('items-table');
+    const row = table.insertRow(-1);
+    row.innerHTML = `
+      <td><input type="text" placeholder="Item Name"></td>
+      <td><input type="number" value="1" oninput="calculateTotal()"></td>
+      <td><input type="number" value="0" oninput="calculateTotal()"></td>
+      <td class="item-total">0</td>
+    `;
+  }
+
+  function calculateTotal() {
+    let rows = document.querySelectorAll('#items-table tr');
+    let subtotal = 0;
+    rows.forEach((row, index) => {
+      if (index === 0) return;
+      const qty = row.querySelectorAll('input')[1].value || 0;
+      const price = row.querySelectorAll('input')[2].value || 0;
+      const total = qty * price;
+      row.querySelector('.item-total').innerText = total.toFixed(2);
+      subtotal += total;
+    });
+    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+    const gstPercent = document.getElementById('gst').value || 0;
+    const grandTotal = subtotal + (subtotal * gstPercent / 100);
+    document.getElementById('grandtotal').innerText = grandTotal.toFixed(2);
+  }
+
+  function resizeInvoice(size) {
+    const box = document.getElementById('invoice');
+    if (size === 'small') box.style.transform = 'scale(0.8)';
+    else if (size === 'large') box.style.transform = 'scale(1.2)';
+    else box.style.transform = 'scale(1)';
+    box.style.transformOrigin = 'top center';
+  }
+
+  async function downloadInvoice() {
+    document.getElementById('download-btn').style.display = 'none';
+    document.getElementById('sizeControl').style.display = 'none';
+    document.body.style.background = '#fff';
+
+    const invoice = document.getElementById('invoice');
+    const canvas = await html2canvas(invoice, { scale: 2, backgroundColor: "#ffffff" });
+    const imgData = canvas.toDataURL('image/png');
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+    pdf.save('invoice.pdf');
+
+    document.getElementById('download-btn').style.display = 'block';
+    document.getElementById('sizeControl').style.display = 'block';
+    document.body.style.background = '#f2f2f2';
+  }
+</script>
+
+</body>
+</html>

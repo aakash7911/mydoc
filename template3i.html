@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Invoice Generator (Fixed Download)</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    margin: 30px;
+    color: #2d3436;
+  }
+  .invoice-box {
+    background: #ffffff;
+    padding: 30px;
+    border: none;
+    border-radius: 15px;
+    max-width: 850px;
+    margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  .invoice-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, #00b894, #00cec9);
+    border-radius: 15px 15px 0 0;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00b894;
+    font-size: 2.5em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background: linear-gradient(90deg, #00b894, #00cec9);
+    color: white;
+    font-weight: bold;
+  }
+  .total {
+    text-align: right;
+    font-weight: bold;
+    background: #f8f9fa;
+  }
+  input {
+    width: 90%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  input:focus {
+    outline: none;
+    border-color: #00b894;
+    box-shadow: 0 0 5px rgba(0, 184, 148, 0.5);
+  }
+  #download-btn {
+    display: block;
+    margin: 25px auto;
+    padding: 14px 30px;
+    background: linear-gradient(90deg, #00b894, #00cec9);
+    color: white;
+    border: none;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 184, 148, 0.4);
+  }
+  #sizeControl {
+    text-align: center;
+    margin-top: 15px;
+  }
+  #sizeControl button {
+    margin: 5px;
+    padding: 10px 18px;
+    border: none;
+    background: #636e72;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #sizeControl button:hover {
+    background: #2d3436;
+  }
+  .invoice-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .seller-info, .buyer-info {
+    width: 45%;
+  }
+  .seller-info {
+    text-align: left;
+  }
+  .buyer-info {
+    text-align: right;
+  }
+  .invoice-details p {
+    margin: 8px 0;
+    font-size: 16px;
+  }
+  .invoice-details strong {
+    color: #00b894;
+  }
+</style>
+</head>
+<body>
+
+<div class="invoice-box" id="invoice">
+  <div class="invoice-details">
+    <div class="seller-info">
+      <p><strong>Seller Name:</strong> <input type="text" placeholder="Seller Name (Optional)"></p>
+      <p><strong>Location:</strong> <input type="text" placeholder="Location (Optional)"></p>
+    </div>
+    <div class="buyer-info">
+      <p><strong>Buyer Name:</strong> <input type="text" placeholder="Buyer Name (Optional)"></p>
+      <p><strong>Date:</strong> <input type="date" id="invoice-date"></p>
+    </div>
+  </div>
+  <h1>INVOICE</h1>
+
+  <table id="items-table">
+    <tr>
+      <th>Item</th>
+      <th>Qty</th>
+      <th>Price (₹)</th>
+      <th>Total (₹)</th>
+    </tr>
+    <tr>
+      <td><input type="text" placeholder="Item Name"></td>
+      <td><input type="number" value="1" oninput="calculateTotal()"></td>
+      <td><input type="number" value="0" oninput="calculateTotal()"></td>
+      <td class="item-total">0</td>
+    </tr>
+  </table>
+
+  <button id="add-item-btn" onclick="addRow()">+ Add Item</button>
+
+  <table>
+    <tr>
+      <td colspan="3" class="total">Subtotal</td>
+      <td id="subtotal">0</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="total">GST (%)</td>
+      <td><input type="number" id="gst" value="18" oninput="calculateTotal()"></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="total">Grand Total</td>
+      <td id="grandtotal"><strong>0</strong></td>
+    </tr>
+  </table>
+</div>
+
+<div id="sizeControl">
+  <button onclick="resizeInvoice('small')">Small</button>
+  <button onclick="resizeInvoice('normal')">Normal</button>
+  <!--<button onclick="resizeInvoice('large')">Large</button>-->
+</div>
+
+<button id="download-btn" onclick="downloadInvoice()">Download Invoice (PDF / PNG)</button>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  document.getElementById('invoice-date').value = new Date().toISOString().split('T')[0];
+
+  function addRow() {
+    const table = document.getElementById('items-table');
+    const row = table.insertRow(-1);
+    row.innerHTML = `
+      <td><input type="text" placeholder="Item Name"></td>
+      <td><input type="number" value="1" oninput="calculateTotal()"></td>
+      <td><input type="number" value="0" oninput="calculateTotal()"></td>
+      <td class="item-total">0</td>
+    `;
+  }
+
+  function calculateTotal() {
+    let rows = document.querySelectorAll('#items-table tr');
+    let subtotal = 0;
+    rows.forEach((row, index) => {
+      if (index === 0) return;
+      const qty = row.querySelectorAll('input')[1].value || 0;
+      const price = row.querySelectorAll('input')[2].value || 0;
+      const total = qty * price;
+      row.querySelector('.item-total').innerText = total.toFixed(2);
+      subtotal += total;
+    });
+    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+    const gstPercent = document.getElementById('gst').value || 0;
+    const grandTotal = subtotal + (subtotal * gstPercent / 100);
+    document.getElementById('grandtotal').innerText = grandTotal.toFixed(2);
+  }
+
+  function resizeInvoice(size) {
+    const box = document.getElementById('invoice');
+    if (size === 'small') box.style.transform = 'scale(0.8)';
+    else if (size === 'large') box.style.transform = 'scale(1.2)';
+    else box.style.transform = 'scale(1)';
+    box.style.transformOrigin = 'top center';
+  }
+
+  async function downloadInvoice() {
+    const invoice = document.getElementById('invoice');
+    const downloadBtn = document.getElementById('download-btn');
+    const sizeControl = document.getElementById('sizeControl');
+    const addItemBtn = document.getElementById('add-item-btn');
+
+    // Hide buttons
+    downloadBtn.style.display = 'none';
+    sizeControl.style.display = 'none';
+    addItemBtn.style.display = 'none';
+
+    // Replace inputs with their values temporarily
+    const inputs = invoice.querySelectorAll('input');
+    const replaced = [];
+    inputs.forEach(input => {
+      const span = document.createElement('span');
+      span.textContent = input.value || input.placeholder;
+      input.style.display = 'none';
+      input.parentNode.insertBefore(span, input);
+      replaced.push({ input, span });
+    });
+
+    // Capture invoice
+    const canvas = await html2canvas(invoice, { scale: 2, backgroundColor: "#ffffff" });
+    const imgData = canvas.toDataURL('image/png');
+
+    // PNG download
+    const a = document.createElement('a');
+    a.href = imgData;
+    a.download = 'invoice.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // PDF download
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+    pdf.save('invoice.pdf');
+
+    // Restore everything
+    replaced.forEach(({ input, span }) => {
+      span.remove();
+      input.style.display = '';
+    });
+    downloadBtn.style.display = 'block';
+    sizeControl.style.display = 'block';
+    addItemBtn.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

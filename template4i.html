@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Generator</title>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 40px;
+    color: #333;
+  }
+  .invoice-container {
+    max-width: 900px;
+    margin: auto;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+  }
+  .invoice-header {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+  }
+  .invoice-header h1 {
+    margin: 0;
+    font-size: 3em;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  .invoice-details {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+  }
+  .seller-info, .buyer-info {
+    width: 45%;
+  }
+  .seller-info h3, .buyer-info h3 {
+    margin-top: 0;
+    color: #1e3c72;
+    font-size: 1.4em;
+    border-bottom: 2px solid #1e3c72;
+    padding-bottom: 5px;
+  }
+  .invoice-details p {
+    margin: 8px 0;
+    font-size: 16px;
+  }
+  .invoice-details strong {
+    color: #2a5298;
+  }
+  .invoice-body {
+    padding: 30px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  th, td {
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    text-align: left;
+  }
+  th {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .total-table {
+    margin-top: 30px;
+    border: none;
+    box-shadow: none;
+  }
+  .total-table td {
+    border: none;
+    padding: 10px 15px;
+  }
+  .total {
+    text-align: right;
+    font-weight: bold;
+    color: #1e3c72;
+  }
+  .grand-total {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    font-size: 1.2em;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+  input:focus {
+    outline: none;
+    border-color: #1e3c72;
+    box-shadow: 0 0 10px rgba(30, 60, 114, 0.3);
+  }
+  button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin: 10px 5px;
+  }
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+  #add-item-btn {
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+  }
+  #sizeControl {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .invoice-footer {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #e9ecef;
+    color: #6c757d;
+  }
+
+  /* Fixed Download Button */
+  #download-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 15px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  }
+</style>
+</head>
+<body>
+
+<div class="invoice-container" id="invoice">
+  <div class="invoice-header">
+    <h1>INVOICE</h1>
+  </div>
+
+  <div class="invoice-details">
+    <div class="seller-info">
+      <h3>Seller Information</h3>
+      <p><strong>Name:</strong> <input type="text" placeholder="Seller Name"></p>
+      <p><strong>Location:</strong> <input type="text" placeholder="Location"></p>
+    </div>
+    <div class="buyer-info">
+      <h3>Buyer Information</h3>
+      <p><strong>Name:</strong> <input type="text" placeholder="Buyer Name"></p>
+      <p><strong>Date:</strong> <input type="date" id="invoice-date"></p>
+    </div>
+  </div>
+
+  <div class="invoice-body">
+    <table id="items-table">
+      <tr>
+        <th>Item Description</th>
+        <th>Qty</th>
+        <th>Price (₹)</th>
+        <th>Total (₹)</th>
+      </tr>
+      <tr>
+        <td><input type="text" placeholder="Item Name"></td>
+        <td><input type="number" value="1" oninput="calculateTotal()"></td>
+        <td><input type="number" value="0" oninput="calculateTotal()"></td>
+        <td class="item-total">0.00</td>
+      </tr>
+    </table>
+
+    <button id="add-item-btn" onclick="addRow()">+ Add Item</button>
+
+    <table class="total-table">
+      <tr>
+        <td colspan="3" class="total">Subtotal</td>
+        <td id="subtotal">0.00</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="total">GST (%)</td>
+        <td><input type="number" id="gst" value="18" oninput="calculateTotal()"></td>
+      </tr>
+      <tr>
+        <td colspan="3" class="total grand-total">Grand Total</td>
+        <td class="grand-total"><strong id="grandtotal">0.00</strong></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="invoice-footer">
+    <p>Thank you for your business!</p>
+  </div>
+</div>
+
+<div id="sizeControl">
+  <button onclick="resizeInvoice('small')">Small</button>
+  <button onclick="resizeInvoice('normal')">Normal</button>
+  <!--<button onclick="resizeInvoice('large')">Large</button>-->
+</div>
+
+<button id="download-btn" onclick="downloadInvoice()">Download Invoice (PDF & PNG)</button>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  // Default date set
+  document.getElementById('invoice-date').value = new Date().toISOString().split('T')[0];
+
+  function addRow() {
+    const table = document.getElementById('items-table');
+    const row = table.insertRow(-1);
+    row.innerHTML = `
+      <td><input type="text" placeholder="Item Name"></td>
+      <td><input type="number" value="1" oninput="calculateTotal()"></td>
+      <td><input type="number" value="0" oninput="calculateTotal()"></td>
+      <td class="item-total">0.00</td>
+    `;
+  }
+
+  function calculateTotal() {
+    let rows = document.querySelectorAll('#items-table tr');
+    let subtotal = 0;
+    rows.forEach((row, index) => {
+      if (index === 0) return;
+      const qty = row.querySelectorAll('input')[1].value || 0;
+      const price = row.querySelectorAll('input')[2].value || 0;
+      const total = qty * price;
+      row.querySelector('.item-total').innerText = total.toFixed(2);
+      subtotal += total;
+    });
+    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+    const gstPercent = document.getElementById('gst').value || 0;
+    const grandTotal = subtotal + (subtotal * gstPercent / 100);
+    document.getElementById('grandtotal').innerText = grandTotal.toFixed(2);
+  }
+
+  function resizeInvoice(size) {
+    const box = document.querySelector('.invoice-container');
+    if (size === 'small') box.style.transform = 'scale(0.8)';
+    else if (size === 'large') box.style.transform = 'scale(1.2)';
+    else box.style.transform = 'scale(1)';
+    box.style.transformOrigin = 'top center';
+  }
+
+  async function downloadInvoice() {
+    console.log('Download started...'); // For debugging
+    const downloadBtn = document.getElementById('download-btn');
+    const sizeControl = document.getElementById('sizeControl');
+    downloadBtn.style.display = 'none';
+    sizeControl.style.display = 'none';
+    document.body.style.background = '#ffffff';
+
+    try {
+      const invoice = document.getElementById('invoice');
+      const clone = invoice.cloneNode(true);
+
+      const addBtn = clone.querySelector('#add-item-btn');
+      if (addBtn) addBtn.remove();
+
+      const inputs = clone.querySelectorAll('input');
+      inputs.forEach(input => {
+        const span = document.createElement('span');
+        span.textContent = input.value || input.placeholder;
+        input.parentNode.replaceChild(span, input);
+      });
+
+      const canvas = await html2canvas(clone, { scale: 2, backgroundColor: "#ffffff" });
+      const imgData = canvas.toDataURL('image/png');
+
+      // Download PNG
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'invoice.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log('PNG downloaded');
+      });
+
+      // Download PDF
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+      pdf.save('invoice.pdf');
+      console.log('PDF downloaded');
+
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again or check your browser settings.');
+    }
+
+    // Restore
+    downloadBtn.style.display = 'block';
+    sizeControl.style.display = 'block';
+    document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+  }
+</script>
+
+</body>
+</html>
