@@ -349,11 +349,591 @@ h1 {
   <div class="template-dropdown">
     <button class="template-btn" onclick="toggleDropdown('note')">Note Template ▾</button>
     <div id="noteDropdown" class="dropdown-content">
-      <button onclick="openTemplate('template1n.html')">Template 1</button>
-      <button onclick="openTemplate('template2n.html')">Template 2</button>
-      <button onclick="openTemplate('template3n.html')">Template 3</button>
-      <button onclick="openTemplate('template4n.html')">Template 4</button>
-      <button onclick="openTemplate('template5n.html')">Template 5</button>
+      <button onclick="openTemplate('template1n.html')">simple/note</button>
+      <button onclick="openTemplate('template2n.html')">Professional</button>
+      <button onclick="openTemplate('template3n.html')">School/college</button>
+      <button onclick="openTemplate('template4n.html')">Business/Client</button>
+      <button onclick="openTemplate('template5n.html')">Official/Office</button>
+    </div>
+  </div>
+
+  <!-- Rental Agreement Templates -->
+  <div class="template-dropdown">
+    <button class="template-btn" onclick="toggleDropdown('rental')">Rental Agreement Template ▾</button>
+    <div id="rentalDropdown" class="dropdown-content">
+      <button onclick="openTemplate('template1ra.html')">Template 1</button>
+      <button onclick="openTemplate('template2ra.html')">Template 2</button>
+      <button onclick="openTemplate('template3ra.html')">Template 3</button>
+      <button onclick="openTemplate('template4ra.html')">Template 4</button>
+      <button onclick="openTemplate('template5ra.html')">Template 5</button>
+    </div>
+  </div>
+
+  <!-- Full Agreement Templates -->
+  <div class="template-dropdown">
+    <button class="template-btn" onclick="toggleDropdown('full')">Full Agreement Template ▾</button>
+    <div id="fullDropdown" class="dropdown-content">
+      <button onclick="openTemplate('template1f.html')">Template 1</button>
+      <button onclick="openTemplate('template2f.html')">Template 2</button>
+      <button onclick="openTemplate('template3f.html')">Template 3</button>
+      <button onclick="openTemplate('template4f.html')">Template 4</button>
+      <button onclick="openTemplate('template5f.html')">Template 5</button>
+    </div>
+  </div>
+</div>
+
+      
+
+  <!-- How to Use Section -->
+  <section class="section">
+    <div class="container">
+      <h2>How to Use</h2>
+      <p>Follow these simple steps to create your perfect document.</p>
+      <div class="features">
+        <div class="feature">
+          <h3>Step 1: Choose a Template</h3>
+          <p>Select from our library of templates or start from scratch.</p>
+        </div>
+        <div class="feature">
+          <h3>Step 2: Customize</h3>
+          <p>Use the toolbar to apply fonts, styles, and underlines.</p>
+        </div>
+        <div class="feature">
+          <h3>Step 3: Edit</h3>
+          <p>Type or paste your content in the editor.</p>
+        </div>
+        <div class="feature">
+          <h3>Step 4: Save</h3>
+          <p>Click save to download your document as a text file.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terms and Conditions Section -->
+  <section class="section">
+    <div class="container">
+      <h2>Terms and Conditions</h2>
+      <p>Please read our terms carefully before using the service.</p>
+      <div class="features">
+        <div class="feature">
+          <h3>Usage Policy</h3>
+          <p>This tool is for personal and professional document creation. Misuse is prohibited.</p>
+        </div>
+        <div class="feature">
+          <h3>Data Privacy</h3>
+          <p>Your documents are processed locally. We do not store any data.</p>
+        </div>
+        <div class="feature">
+          <h3>Liability</h3>
+          <p>We are not responsible for any misuse or legal issues arising from created documents.</p>
+        </div>
+        <div class="feature">
+          <h3>Contact</h3>
+          <p>For questions, reach out via our support channels.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Powered by <a href="https://github.com" target="_blank">GitHub</a> | Enhance your documents effortlessly!</p>
+      <p>&copy; 2025 Modern Document Creator. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollToTop" class="scroll-to-top">↑</button>
+
+<script>
+const boldBtn = document.getElementById('boldBtn');
+const italicBtn = document.getElementById('italicBtn');
+const underlineBtn = document.getElementById('underlineBtn');
+const saveBtn = document.getElementById('saveBtn');
+const loadBtn = document.getElementById('loadBtn');
+const templateSelect = document.getElementById('templateSelect');
+const fontSelector = document.getElementById('fontSelector');
+const italicSelector = document.getElementById('italicSelector');
+const underlineSelector = document.getElementById('underlineSelector');
+const editor = document.getElementById('editor');
+const scrollToTopBtn = document.getElementById('scrollToTop');
+
+// Toggle selectors
+boldBtn.addEventListener('click', () => {
+  fontSelector.style.display = fontSelector.style.display === 'block' ? 'none' : 'block';
+  italicSelector.style.display = 'none';
+  underlineSelector.style.display = 'none';
+});
+italicBtn.addEventListener('click', () => {
+  italicSelector.style.display = italicSelector.style.display === 'block' ? 'none' : 'block';
+  fontSelector.style.display = 'none';
+  underlineSelector.style.display = 'none';
+});
+underlineBtn.addEventListener('click', () => {
+  underlineSelector.style.display = underlineSelector.style.display === 'block' ? 'none' : 'block';
+  fontSelector.style.display = 'none';
+  italicSelector.style.display = 'none';
+});
+
+// Apply font family
+fontSelector.addEventListener('change', () => {
+  editor.style.fontFamily = fontSelector.value;
+  fontSelector.style.display = 'none';
+});
+
+// Apply italic style
+italicSelector.addEventListener('change', () => {
+  const font = italicSelector.value;
+  if (font === 'italic') {
+    editor.style.fontStyle = 'italic';
+    editor.style.fontFamily = 'Poppins';
+  } else {
+    editor.style.fontFamily = font;
+    editor.style.fontStyle = 'normal';
+  }
+  italicSelector.style.display = 'none';
+});
+
+// Apply underline
+underlineSelector.addEventListener('change', () => {
+  const value = underlineSelector.value;
+  if (value === 'none') {
+    editor.style.textDecoration = 'none';
+  } else if (value === 'underline') {
+    editor.style.textDecoration = 'underline';
+    editor.style.textDecorationStyle = 'solid';
+  } else {
+    const [type, style] = value.split(' ');
+    editor.style.textDecoration = type;
+    editor.style.textDecorationStyle = style;
+  }
+  underlineSelector.style.display = 'none';
+});
+
+// Handle template selection
+templateSelect.addEventListener('change', () => {
+  const selectedValue = templateSelect.value;
+  if (selectedValue === 'agreement') {
+    // Replace 'https://yourusername.github.io/yourrepo/agreement.html' with your actual GitHub Pages URL
+    window.location.href ="agreement.html"; // ← Yahan apna GitHub link dalen
+  }
+  // Add more cases for other templates if needed
+  templateSelect.selectedIndex = 0; // Reset to default after selection
+});
+function toggleDropdown(type) {
+  const dropdown = document.getElementById(`${type}Dropdown`);
+  const allDropdowns = document.querySelectorAll('.dropdown-content');
+  allDropdowns.forEach(d => {
+    if (d !== dropdown) d.style.display = 'none';
+  });
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+function openTemplate(fileName) {
+  // 👉 Update with your actual GitHub Pages base URL
+  const baseURL = "https://aakash7911.github.io/mydoc/";
+  window.location.href = baseURL + fileName;
+}
+
+// ✅ SAVE FUNCTION
+saveBtn.addEventListener('click', () => {
+  const text = editor.value.trim();
+  if (!text) {
+    alert("Please write something before saving!");
+    return;
+  }
+
+  try {
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'MyDocument.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  } catch (err) {
+    alert("Download failed: " + err.message);
+  }
+});
+
+// ✅ MAKE RESUME BUTTON (opens your GitHub load.html page)
+loadBtn.addEventListener('click', () => {
+  window.location.href = "load.html"; // ← replace with your actual GitHub link
+});
+
+// Scroll to top functionality
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) {
+    scrollToTopBtn.style.display = 'block';
+  } else {
+    scrollToTopBtn.style.display = 'none';
+  }
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Document Creator</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Playfair+Display:wght@500&family=Courier+Prime&family=Dancing+Script&family=Indie+Flower&family=Great+Vibes&family=Kaushan+Script&display=swap');
+.template-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #1a1a2e;
+  min-width: 160px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffff33;
+  z-index: 10;
+  text-align: left;
+}
+
+.dropdown-content button {
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 10px 15px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.dropdown-content button:hover {
+  background: #00ffff22;
+  color: #00ffff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(145deg, #0b0b10, #131321);
+  color: #fff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(145deg, #0b0b10, #131321);
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://via.placeholder.com/1920x1080/0b0b10/00ffff?text=Document+Creator') no-repeat center center;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #aaf2ff;
+  text-shadow: 0 0 15px #00ffff;
+}
+
+.highlight {
+  color: #00ffff;
+}
+
+.toolbar {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn {
+  background: linear-gradient(90deg, #3a00ff, #ff00e6);
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #8a2be2;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.template-select {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #111122;
+  color: #fff;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.editor textarea {
+  width: 100%;
+  height: 300px;
+  background: #0d0d14;
+  color: #ccc;
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  transition: font-family 0.3s ease;
+}
+
+.template-buttons {
+  margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.template-btn {
+  background: #2d2d3a;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
+  color: #ddd;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00ffff33;
+}
+
+.template-btn:hover {
+  background: #363648;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+.font-selector, .italic-selector, .underline-selector {
+  display: none;
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #111122;
+  color: #fff;
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.section {
+  padding: 80px 0;
+  background: linear-gradient(145deg, #131321, #0b0b10);
+}
+
+.section:nth-child(even) {
+  background: linear-gradient(145deg, #0b0b10, #131321);
+}
+
+.section h2 {
+  font-size: 2.5rem;
+  color: #aaf2ff;
+  margin-bottom: 20px;
+}
+
+.section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #ccc;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-10px);
+}
+
+.feature h3 {
+  color: #00ffff;
+  margin-bottom: 10px;
+}
+
+.footer {
+  padding: 40px 0;
+  background: #0b0b10;
+  text-align: center;
+  color: #aaa;
+}
+
+.footer a {
+  color: #00ffff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(90deg, #3a00ff, #ff00e6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #8a2be2;
+  transition: all 0.3s ease;
+  font-size: 1.5rem;
+  display: none;
+}
+
+.scroll-to-top:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .section h2 {
+    font-size: 2rem;
+  }
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1><span class="highlight">Modern</span> Document Creator</h1>
+      
+      <div class="toolbar">
+        <button id="boldBtn" class="btn">Bold / Font</button>
+        <button id="italicBtn" class="btn">Italic / Style</button>
+        <button id="underlineBtn" class="btn">Underline</button>
+        <button id="saveBtn" class="btn">Save</button>
+        <button id="loadBtn" class="btn">Make Resume</button>
+        <select id="templateSelect" class="template-select">
+          <option>Choose Template</option>
+          <option value="agreement">Agreement</option>
+          <!-- Add more options here if needed -->
+        </select>
+      </div>
+
+      <select id="fontSelector" class="font-selector">
+        <option value="Poppins">Poppins (Default)</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Playfair Display">Playfair Display</option>
+        <option value="Courier Prime">Courier Prime</option>
+        <option value="Arial">Arial</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+      </select>
+
+      <select id="italicSelector" class="italic-selector">
+        <option value="italic">Normal Italic</option>
+        <option value="'Dancing Script', cursive">Dancing Script</option>
+        <option value="'Indie Flower', cursive">Indie Flower</option>
+        <option value="'Great Vibes', cursive">Great Vibes</option>
+        <option value="'Kaushan Script', cursive">Kaushan Script</option>
+      </select>
+
+      <select id="underlineSelector" class="underline-selector">
+        <option value="none">No Underline</option>
+        <option value="underline">Single Underline</option>
+        <option value="underline double">Double Underline</option>
+        <option value="underline dotted">Dotted Underline</option>
+        <option value="underline dashed">Dashed Underline</option>
+        <option value="underline wavy">Wavy Underline</option>
+      </select>
+
+      <div class="editor">
+        <textarea id="editor" placeholder="Start creating your document here..."></textarea>
+      </div>
+      <div class="template-buttons">
+  <!-- Resume Templates -->
+  <div class="template-dropdown">
+    <button class="template-btn" onclick="toggleDropdown('resume')">Resume Template ▾</button>
+    <div id="resumeDropdown" class="dropdown-content">
+      <button onclick="openTemplate('template1r.html')">Template 1</button>
+      <button onclick="openTemplate('template2r.html')">Template 2</button>
+      <button onclick="openTemplate('template3r.html')">Template 3</button>
+      <button onclick="openTemplate('template4r.html')">Template 4</button>
+      <button onclick="openTemplate('template5r.html')">Template 5</button>
+    </div>
+  </div>
+
+  <!-- Invoice Templates -->
+  <div class="template-dropdown">
+    <button class="template-btn" onclick="toggleDropdown('invoice')">Invoice Template ▾</button>
+    <div id="invoiceDropdown" class="dropdown-content">
+      <button onclick="openTemplate('template1i.html')">Template 1</button>
+      <button onclick="openTemplate('template2i.html')">Template 2</button>
+      <button onclick="openTemplate('template3i.html')">Template 3</button>
+      <button onclick="openTemplate('template4i.html')">Template 4</button>
+      <button onclick="openTemplate('template5i.html')">Template 5</button>
+    </div>
+  </div>
+
+  <!-- Note Templates -->
+  <div class="template-dropdown">
+    <button class="template-btn" onclick="toggleDropdown('note')">Note Template ▾</button>
+    <div id="noteDropdown" class="dropdown-content">
+      <button onclick="openTemplate('template1n.html')">template 1</button>
+      <button onclick="openTemplate('template2n.html')">Professional</button>
+      <button onclick="openTemplate('template3n.html')">School/College</button>
+      <button onclick="openTemplate('template4n.html')">Official/Office</button>
+      <button onclick="openTemplate('template5n.html')">Business/lient</button>
     </div>
   </div>
 
