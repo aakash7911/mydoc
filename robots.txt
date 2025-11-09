@@ -1,0 +1,3 @@
+vUser-agent: *
+Allow: /
+Sitemap: https://aakash7911.github.io/mydoc/sitemap.xml
