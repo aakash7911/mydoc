@@ -1,0 +1,227 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employment Contract between Employer and Employee</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  form {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 15px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  .agreement-box {
+    background: #fff;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #34495e;
+    margin-top: 25px;
+  }
+  .signature {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .signature div {
+    width: 45%;
+  }
+  .signature-line {
+    border-top: 1px solid #333;
+    margin-top: 60px;
+  }
+  .btn-container {
+    text-align: center;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Employment Contract</h1>
+
+<form id="agreementForm">
+  <label>Employer Name:</label>
+  <input type="text" id="employerName" required>
+
+  <label>Employer Address:</label>
+  <input type="text" id="employerAddress" required>
+
+  <label>Employee Name:</label>
+  <input type="text" id="employeeName" required>
+
+  <label>Employee Position:</label>
+  <input type="text" id="employeePosition" required>
+
+  <label>Job Title:</label>
+  <input type="text" id="jobTitle" required>
+
+  <label>Start Date:</label>
+  <input type="date" id="startDate" required>
+
+  <label>Salary (₹):</label>
+  <input type="number" id="salary" required>
+
+  <label>Working Hours (e.g., 9 AM - 6 PM):</label>
+  <input type="text" id="workingHours" required>
+
+  <label>Working Days (e.g., Monday to Friday):</label>
+  <input type="text" id="workingDays" required>
+
+  <label>Notice Period (e.g., 30 days):</label>
+  <input type="text" id="noticePeriod" required>
+
+  <button type="button" onclick="generateAgreement()">Generate Agreement</button>
+</form>
+
+<div class="agreement-box" id="agreementContent" style="display:none;">
+  <h1>Employment Contract between Employer and Employee</h1>
+
+  <p>This Employment Agreement (“Agreement”) is made on <strong><span id="todayDate"></span></strong> between:</p>
+
+  <p><strong>Employer:</strong> <span id="outEmployer"></span><br>
+  Address: <span id="outAddress"></span></p>
+
+  <p><strong>Employee:</strong> <span id="outEmployee"></span><br>
+  Position: <span id="outPosition"></span></p>
+
+  <h2>1. Employment Terms</h2>
+  <p>The Employer agrees to employ the Employee in the position of <strong><span id="outJobTitle"></span></strong> starting from <strong><span id="outStartDate"></span></strong>. The Employee shall perform all duties assigned by the Employer faithfully and to the best of their abilities.</p>
+
+  <h2>2. Salary & Benefits</h2>
+  <p>The Employee will receive a monthly salary of <strong>₹<span id="outSalary"></span></strong>, payable on or before the last working day of each month. Additional benefits (if any) may be provided as per company policy.</p>
+
+  <h2>3. Working Hours</h2>
+  <p>The Employee is required to work from <strong><span id="outHours"></span></strong>, <strong><span id="outDays"></span></strong>. Overtime, if required, will be compensated as per company policy.</p>
+
+  <h2>4. Confidentiality</h2>
+  <p>The Employee agrees not to disclose any confidential or proprietary information belonging to the Employer during and after the term of employment.</p>
+
+  <h2>5. Termination</h2>
+  <p>Either party may terminate this Agreement by providing <strong><span id="outNotice"></span></strong> written notice. The Employer reserves the right to terminate employment immediately for misconduct, negligence, or breach of confidentiality.</p>
+
+  <h2>6. Governing Law</h2>
+  <p>This Agreement shall be governed by and interpreted in accordance with the laws of India.</p>
+
+  <div class="signature">
+    <div>
+      <p><strong>Employer Signature:</strong></p>
+      <div class="signature-line"></div>
+      <p>Date: ___________</p>
+    </div>
+    <div>
+      <p><strong>Employee Signature:</strong></p>
+      <div class="signature-line"></div>
+      <p>Date: ___________</p>
+    </div>
+  </div>
+</div>
+
+<div class="btn-container" id="printBtn" style="display:none;">
+  <button onclick="window.print()">🖨️ Print / Download</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function generateAgreement() {
+  // Get values
+  const employer = document.getElementById('employerName').value;
+  const address = document.getElementById('employerAddress').value;
+  const employee = document.getElementById('employeeName').value;
+  const position = document.getElementById('employeePosition').value;
+  const jobTitle = document.getElementById('jobTitle').value;
+  const startDate = document.getElementById('startDate').value;
+  const salary = document.getElementById('salary').value;
+  const hours = document.getElementById('workingHours').value;
+  const days = document.getElementById('workingDays').value;
+  const notice = document.getElementById('noticePeriod').value;
+
+  // Fill data
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString();
+  document.getElementById('outEmployer').textContent = employer;
+  document.getElementById('outAddress').textContent = address;
+  document.getElementById('outEmployee').textContent = employee;
+  document.getElementById('outPosition').textContent = position;
+  document.getElementById('outJobTitle').textContent = jobTitle;
+  document.getElementById('outStartDate').textContent = startDate;
+  document.getElementById('outSalary').textContent = salary;
+  document.getElementById('outHours').textContent = hours;
+  document.getElementById('outDays').textContent = days;
+  document.getElementById('outNotice').textContent = notice;
+
+  // Hide the input form
+  document.getElementById('agreementForm').style.display = 'none';
+
+  // Show agreement
+  document.getElementById('agreementContent').style.display = 'block';
+  document.getElementById('printBtn').style.display = 'block';
+
+  // Auto-download as PDF
+  downloadAsPDF();
+
+  // Scroll to agreement
+  document.getElementById('agreementContent').scrollIntoView({behavior:'smooth'});
+}
+
+function downloadAsPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Extract text from agreement content
+  const content = document.getElementById('agreementContent');
+  const textContent = content.innerText || content.textContent; // Get plain text
+  const lines = doc.splitTextToSize(textContent, 180); // Split into lines for PDF
+  
+  doc.text(lines, 10, 10);
+  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  doc.save(`Employment_Contract_${timestamp}.pdf`);
+}
+</script>
+
+</body>
+</html>

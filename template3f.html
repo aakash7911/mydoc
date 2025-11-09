@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Agreement Generator</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  .agreement-box {
+    background: #fff;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  h1, h2 {
+    color: #2a4d8f;
+  }
+  p {
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  .btn-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  button {
+    background: #2a4d8f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+  }
+  button:hover {
+    background: #1e3873;
+  }
+  .signature {
+    margin-top: 30px;
+    width: 100%;
+  }
+  .signature td {
+    padding: 10px;
+    vertical-align: top;
+  }
+
+  /* Hide input form when printing */
+  @media print {
+    #formSection { display: none; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Input Form -->
+<div id="formSection" class="agreement-box">
+  <h1>Loan Agreement Generator</h1>
+  <p>Fill in the details below to auto-generate your Loan Agreement.</p>
+
+  <label>Lender Name:</label>
+  <input type="text" id="lenderName" placeholder="Enter lender name">
+
+  <label>Lender Address:</label>
+  <input type="text" id="lenderAddress" placeholder="Enter lender address">
+
+  <label>Borrower Name:</label>
+  <input type="text" id="borrowerName" placeholder="Enter borrower name">
+
+  <label>Borrower Address:</label>
+  <input type="text" id="borrowerAddress" placeholder="Enter borrower address">
+
+  <label>Loan Amount (₹):</label>
+  <input type="number" id="loanAmount" placeholder="e.g., 100000">
+
+  <label>Interest Rate (% per annum):</label>
+  <input type="number" id="interestRate" placeholder="e.g., 10">
+
+  <label>Repayment Period (in months):</label>
+  <input type="number" id="repaymentMonths" placeholder="e.g., 12">
+
+  <label>Start Date:</label>
+  <input type="date" id="startDate">
+
+  <label>End Date:</label>
+  <input type="date" id="endDate">
+
+  <div class="btn-container">
+    <button onclick="generateAgreement()">Generate Agreement</button>
+  </div>
+</div>
+
+<!-- Generated Agreement -->
+<div id="finalAgreement" class="agreement-box" style="display:none; margin-top:30px;">
+  <h1>Loan Agreement</h1>
+  <p>This Loan Agreement (“Agreement”) is made and entered into on <strong id="dateToday"></strong> between:</p>
+
+  <p>
+    <strong>Lender:</strong> <span id="outLenderName"></span><br>
+    Address: <span id="outLenderAddress"></span>
+  </p>
+
+  <p>
+    <strong>Borrower:</strong> <span id="outBorrowerName"></span><br>
+    Address: <span id="outBorrowerAddress"></span>
+  </p>
+
+  <h2>1. Loan Details</h2>
+  <p>The Lender agrees to lend the Borrower a sum of <strong>₹<span id="outLoanAmount"></span></strong> at an annual interest rate of <strong><span id="outInterestRate"></span>%</strong>. The Borrower agrees to repay the full loan amount with interest within <strong><span id="outRepaymentMonths"></span> months</strong>.</p>
+
+  <h2>2. Disbursement & Repayment</h2>
+  <p>The loan shall commence on <strong id="outStartDate"></strong> and end on <strong id="outEndDate"></strong>. Repayment shall be made in monthly installments as mutually agreed between both parties.</p>
+
+  <h2>3. Interest Calculation</h2>
+  <p>Interest shall accrue on the unpaid principal balance at the agreed rate and will be payable along with each installment. Any delay in repayment may attract a late payment fee or additional interest as decided by the Lender.</p>
+
+  <h2>4. Prepayment</h2>
+  <p>The Borrower may prepay the loan in part or in full at any time without penalty, provided that all accrued interest up to the prepayment date is settled.</p>
+
+  <h2>5. Default</h2>
+  <p>In case of default in payment, the Lender has the right to demand immediate repayment of the outstanding loan balance, along with interest and applicable penalties.</p>
+
+  <h2>6. Security (if any)</h2>
+  <p>If any security or collateral is provided, the details will be attached as a separate document and shall remain the property of the Lender until full repayment.</p>
+
+  <h2>7. Governing Law</h2>
+  <p>This Agreement shall be governed by and interpreted in accordance with the laws of India. Any disputes shall be settled in the courts of appropriate jurisdiction.</p>
+
+  <h2>8. Agreement Acceptance</h2>
+  <p>By signing below, both parties agree to all the terms and conditions mentioned in this Loan Agreement.</p>
+
+  <table class="signature">
+    <tr>
+      <td>
+        <strong>Lender Signature:</strong> ___________________________<br>
+        Name: <span id="outLenderName2"></span><br>
+        Date: ___________________________
+      </td>
+      <td>
+        <strong>Borrower Signature:</strong> ___________________________<br>
+        Name: <span id="outBorrowerName2"></span><br>
+        Date: ___________________________
+      </td>
+    </tr>
+  </table>
+
+  <div class="btn-container">
+    <button onclick="printAgreement()">🖨️ Print Agreement</button>
+    <button onclick="downloadAgreement()">⬇️ Download Agreement</button>
+  </div>
+</div>
+
+<script>
+function generateAgreement() {
+  document.getElementById("finalAgreement").style.display = "block";
+  const today = new Date().toLocaleDateString();
+
+  document.getElementById("dateToday").innerText = today;
+  document.getElementById("outLenderName").innerText = document.getElementById("lenderName").value;
+  document.getElementById("outLenderAddress").innerText = document.getElementById("lenderAddress").value;
+  document.getElementById("outBorrowerName").innerText = document.getElementById("borrowerName").value;
+  document.getElementById("outBorrowerAddress").innerText = document.getElementById("borrowerAddress").value;
+  document.getElementById("outLoanAmount").innerText = document.getElementById("loanAmount").value;
+  document.getElementById("outInterestRate").innerText = document.getElementById("interestRate").value;
+  document.getElementById("outRepaymentMonths").innerText = document.getElementById("repaymentMonths").value;
+  document.getElementById("outStartDate").innerText = document.getElementById("startDate").value;
+  document.getElementById("outEndDate").innerText = document.getElementById("endDate").value;
+  document.getElementById("outLenderName2").innerText = document.getElementById("lenderName").value;
+  document.getElementById("outBorrowerName2").innerText = document.getElementById("borrowerName").value;
+
+  window.scrollTo({ top: document.getElementById("finalAgreement").offsetTop, behavior: 'smooth' });
+}
+
+// ✅ Print only the agreement section
+function printAgreement() {
+  const originalContent = document.body.innerHTML;
+  const agreement = document.getElementById("finalAgreement").outerHTML;
+  document.body.innerHTML = agreement;
+  window.print();
+  document.body.innerHTML = originalContent;
+}
+
+// ✅ Download only the agreement section
+function downloadAgreement() {
+  const content = document.getElementById("finalAgreement").outerHTML;
+  const blob = new Blob([content], { type: "text/html" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Loan_Agreement.html";
+  link.click();
+}
+</script>
+
+</body>
+</html>

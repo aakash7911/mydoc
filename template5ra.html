@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Design and Development Agreement</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  form {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 15px;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #2e86c1;
+  }
+  .agreement-box {
+    background: #fff;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #34495e;
+    margin-top: 25px;
+  }
+  .signature {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .signature div {
+    width: 45%;
+  }
+  .signature-line {
+    border-top: 1px solid #333;
+    margin-top: 60px;
+  }
+  .btn-container {
+    text-align: center;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Removed the H1 title -->
+
+<form id="webForm">
+  <label>Client Name / Company:</label>
+  <input type="text" id="client" required>
+
+  <label>Developer / Agency Name:</label>
+  <input type="text" id="developer" required>
+
+  <label>Project Description (Design, Features, Goals):</label>
+  <textarea id="project" rows="3" placeholder="Example: Responsive website with 5 pages, admin dashboard, and payment gateway."></textarea>
+
+  <label>Project Start Date:</label>
+  <input type="date" id="startDate" required>
+
+  <label>Deadline / Completion Date:</label>
+  <input type="date" id="endDate" required>
+
+  <label>Total Project Cost (₹):</label>
+  <input type="number" id="cost" placeholder="Example: 50000" required>
+
+  <label>Payment Milestones:</label>
+  <textarea id="milestones" rows="2" placeholder="Example: 50% advance, 30% after design approval, 20% after final delivery."></textarea>
+
+  <label>Maintenance Terms:</label>
+  <textarea id="maintenance" rows="2" placeholder="Example: 3 months free bug-fix support after launch."></textarea>
+
+  <label>Jurisdiction (e.g., India):</label>
+  <input type="text" id="jurisdiction" value="India" required>
+
+  <button type="button" onclick="generateAgreement()">Generate Agreement</button>
+</form>
+
+<div class="agreement-box" id="agreementContent" style="display:none;">
+  <h1>Website Design and Development Agreement</h1>
+
+  <p>This Agreement is made on <strong><span id="todayDate"></span></strong> between:</p>
+
+  <p><strong>Client:</strong> <span id="outClient"></span><br>
+  <strong>Developer / Agency:</strong> <span id="outDeveloper"></span></p>
+
+  <h2>1. Project Description</h2>
+  <p>The Developer agrees to design and develop a website for the Client with the following scope:<br>
+  <strong><span id="outProject"></span></strong></p>
+
+  <h2>2. Timeline</h2>
+  <p>The project will commence on <strong><span id="outStart"></span></strong> and is expected to be completed by <strong><span id="outEnd"></span></strong>.</p>
+
+  <h2>3. Payment Terms</h2>
+  <p>The total cost of the project is <strong>₹<span id="outCost"></span></strong>. Payments shall be made as follows:<br>
+  <span id="outMilestones"></span></p>
+
+  <h2>4. Ownership and Copyright</h2>
+  <p>Upon full payment, all rights, titles, and interests in the final website design, code, and content shall belong to the Client. The Developer retains the right to display the project in their portfolio.</p>
+
+  <h2>5. Maintenance</h2>
+  <p>The Developer agrees to provide maintenance and support as follows:<br>
+  <strong><span id="outMaintenance"></span></strong></p>
+
+  <h2>6. Confidentiality</h2>
+  <p>Both parties agree not to disclose any confidential information obtained during the course of this project without prior written consent.</p>
+
+  <h2>7. Termination</h2>
+  <p>Either party may terminate this Agreement with a written notice if the other party breaches any term of this Agreement. Payments for work completed up to the termination date shall be made accordingly.</p>
+
+  <h2>8. Dispute Resolution</h2>
+  <p>In case of any disputes arising under this Agreement, both parties shall attempt to resolve them amicably. If unresolved, the matter shall be subject to the jurisdiction of <strong><span id="outJurisdiction"></span></strong>.</p>
+
+  <h2>9. Entire Agreement</h2>
+  <p>This Agreement represents the entire understanding between the Client and Developer regarding the project.</p>
+
+  <div class="signature">
+    <div>
+      <p><strong>Client Signature:</strong></p>
+      <div class="signature-line"></div>
+      <p>Date: ___________</p>
+    </div>
+    <div>
+      <p><strong>Developer Signature:</strong></p>
+      <div class="signature-line"></div>
+      <p>Date: ___________</p>
+    </div>
+  </div>
+</div>
+
+<div class="btn-container" id="printBtn" style="display:none;">
+  <button onclick="window.print()">🖨️ Print / Download</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function generateAgreement() {
+  document.getElementById("todayDate").textContent = new Date().toLocaleDateString();
+  document.getElementById("outClient").textContent = document.getElementById("client").value;
+  document.getElementById("outDeveloper").textContent = document.getElementById("developer").value;
+  document.getElementById("outProject").textContent = document.getElementById("project").value;
+  document.getElementById("outStart").textContent = document.getElementById("startDate").value;
+  document.getElementById("outEnd").textContent = document.getElementById("endDate").value;
+  document.getElementById("outCost").textContent = document.getElementById("cost").value;
+  document.getElementById("outMilestones").textContent = document.getElementById("milestones").value;
+  document.getElementById("outMaintenance").textContent = document.getElementById("maintenance").value;
+  document.getElementById("outJurisdiction").textContent = document.getElementById("jurisdiction").value;
+
+  // Hide the input form
+  document.getElementById('webForm').style.display = 'none';
+
+  // Show Agreement
+  document.getElementById("agreementContent").style.display = "block";
+  document.getElementById("printBtn").style.display = "block";
+
+  // Auto-download as PDF
+  downloadAsPDF();
+
+  // Scroll to agreement
+  document.getElementById("agreementContent").scrollIntoView({behavior:'smooth'});
+}
+
+function downloadAsPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Extract text from agreement content
+  const content = document.getElementById('agreementContent');
+  const textContent = content.innerText || content.textContent; // Get plain text
+  const lines = doc.splitTextToSize(textContent, 180); // Split into lines for PDF
+  
+  doc.text(lines, 10, 10);
+  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  doc.save(`Website_Design_Development_Agreement_${timestamp}.pdf`);
+}
+</script>
+
+</body>
+</html>

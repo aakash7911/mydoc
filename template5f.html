@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Duration of Contract — Agreement Generator</title>
+<style>
+  :root {
+    --accent: #2a4d8f;
+    --muted: #667;
+    --bg: #f5f7fb;
+  }
+
+  body {
+    font-family: "Poppins", Arial, sans-serif;
+    background: var(--bg);
+    margin: 0;
+    padding: 20px;
+    color: #222;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 20px auto;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  h1 {
+    color: var(--accent);
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 6px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccd3da;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .row .col {
+    flex: 1;
+  }
+
+  .actions {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 6px;
+  }
+
+  button.secondary {
+    background: #555;
+  }
+
+  .agreement {
+    margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e8ebf1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .muted {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .signature {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+
+  .sig-box {
+    width: 48%;
+  }
+
+  .computed {
+    background: #f1f6ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #d8e3ff;
+  }
+
+  /* Hide inputs and buttons during print */
+  @media print {
+    body {
+      background: #fff;
+      -webkit-print-color-adjust: exact;
+    }
+    .card > *:not(#agreementPreview):not(#printDownloadBtns) {
+      display: none !important;
+    }
+    #agreementPreview {
+      display: block !important;
+    }
+    @page {
+      size: A4;
+      margin: 0.6in;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Duration of Contract — Agreement Generator</h1>
+      <p class="muted">
+        Fill in the details below to generate a professional contract duration clause.
+      </p>
+
+      <label>Party A (Name / Company)</label>
+      <input id="partyA" type="text" placeholder="e.g., ABC Pvt. Ltd.">
+
+      <label>Party B (Name / Company)</label>
+      <input id="partyB" type="text" placeholder="e.g., Rohan Sharma">
+
+      <div class="row">
+        <div class="col">
+          <label>Contract Start Date</label>
+          <input id="startDate" type="date">
+        </div>
+        <div class="col">
+          <label>Contract End Date</label>
+          <input id="endDate" type="date">
+        </div>
+      </div>
+
+      <label>Duration Behavior</label>
+      <select id="durationBehavior">
+        <option value="fixed">Fixed term (ends on End Date)</option>
+        <option value="renewable">Fixed term with automatic renewal</option>
+        <option value="perpetual">Perpetual until terminated</option>
+      </select>
+
+      <label>If renewable — Renewal Term / Notice</label>
+      <input id="renewInfo" type="text" placeholder="e.g., renews for 12 months unless either party gives 30 days' notice">
+
+      <label>Early Termination Notice Period</label>
+      <input id="noticePeriod" type="text" placeholder="e.g., 30 days">
+
+      <label>Additional Notes (optional)</label>
+      <textarea id="notes" placeholder="Optional notes..."></textarea>
+
+      <div class="actions">
+        <button onclick="generate()">Generate Agreement</button>
+        <button class="secondary" onclick="clearForm()">Clear</button>
+      </div>
+
+      <div id="agreementPreview" class="agreement" style="display:none"></div>
+
+      <div class="actions" style="display:none" id="printDownloadBtns">
+        <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button onclick="downloadAgreement()">⬇️ Download HTML</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+function formatDate(d){
+  if(!d) return '';
+  const dt=new Date(d);
+  return dt.toLocaleDateString();
+}
+
+function diffDays(start,end){
+  const s=new Date(start), e=new Date(end);
+  if(isNaN(s)||isNaN(e)||e<s) return null;
+  return Math.round((e-s)/(24*60*60*1000))+1;
+}
+
+function generate(){
+  const A=document.getElementById('partyA').value.trim()||'[Party A]';
+  const B=document.getElementById('partyB').value.trim()||'[Party B]';
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const behavior=document.getElementById('durationBehavior').value;
+  const renewInfo=document.getElementById('renewInfo').value.trim();
+  const notice=document.getElementById('noticePeriod').value.trim()||'30 days';
+  const notes=document.getElementById('notes').value.trim();
+
+  let clause=`<h2 style="color:#2a4d8f;">Duration of Contract</h2>`;
+  clause+=`<p>This Agreement is made between <strong>${A}</strong> and <strong>${B}</strong>.</p>`;
+
+  if(behavior==='perpetual'){
+    clause+=`<p>The Agreement shall commence on <strong>${formatDate(start)||'[Start Date]'}</strong> and shall continue indefinitely until terminated by either party with <strong>${notice}</strong> written notice.</p>`;
+  } else {
+    const days=diffDays(start,end);
+    clause+=`<p>The Agreement shall commence on <strong>${formatDate(start)||'[Start Date]'}</strong> and remain in force until <strong>${formatDate(end)||'[End Date]'}</strong>.</p>`;
+    if(days) clause+=`<div class="computed"><strong>Duration:</strong> ${days} day(s)</div>`;
+    if(behavior==='renewable') clause+=`<p><strong>Renewal:</strong> ${renewInfo || 'Automatically renews unless terminated with written notice before expiry.'}</p>`;
+  }
+
+  clause+=`<p><strong>Termination:</strong> Either party may terminate this Agreement by giving <strong>${notice}</strong> written notice.</p>`;
+  if(notes) clause+=`<p><strong>Additional Notes:</strong> ${notes}</p>`;
+  clause+=`<p><strong>Effect of Expiry:</strong> Both parties agree to cooperate for an orderly handover upon expiry or termination.</p>`;
+
+  clause+=`
+    <div class="signature">
+      <div class="sig-box">
+        <p><strong>For ${A}</strong></p>
+        <p>Signature: ________________________</p>
+        <p>Name: ____________________________</p>
+        <p>Date: ____________________________</p>
+      </div>
+      <div class="sig-box">
+        <p><strong>For ${B}</strong></p>
+        <p>Signature: ________________________</p>
+        <p>Name: ____________________________</p>
+        <p>Date: ____________________________</p>
+      </div>
+    </div>`;
+
+  const preview=document.getElementById('agreementPreview');
+  preview.innerHTML=clause;
+  preview.style.display='block';
+  document.getElementById('printDownloadBtns').style.display='block';
+  preview.scrollIntoView({behavior:'smooth'});
+}
+
+function clearForm(){
+  document.querySelectorAll('input,textarea,select').forEach(el=>{
+    if(el.type==='select-one') el.selectedIndex=0;
+    else el.value='';
+  });
+  document.getElementById('agreementPreview').style.display='none';
+  document.getElementById('printDownloadBtns').style.display='none';
+}
+
+function downloadAgreement(){
+  const content=document.getElementById('agreementPreview').innerHTML;
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Duration of Contract Agreement</title>
+  <style>body{font-family:Poppins,Arial,sans-serif;padding:20px;line-height:1.6;color:#111}
+  h2{color:#2a4d8f}.computed{background:#f1f6ff;padding:10px;border-radius:6px;border:1px solid #d8e3ff}</style></head><body>${content}</body></html>`;
+  
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Duration_of_Contract_Agreement.html';
+  a.click();
+}
+</script>
+</body>
+</html>

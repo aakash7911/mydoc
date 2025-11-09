@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internship Agreement</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  .agreement-box {
+    background: #fff;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  h1, h2 {
+    color: #2a4d8f;
+  }
+  p {
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  .btn-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  button {
+    background: #2a4d8f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+  }
+  button:hover {
+    background: #1e3873;
+  }
+  .signature {
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<div class="agreement-box" id="inputForm">
+  <h1>Internship Agreement</h1>
+  <p>Fill in the details below to auto-generate your Internship Agreement.</p>
+
+  <label>Company Name:</label>
+  <input type="text" id="companyName" placeholder="Enter company name">
+
+  <label>Company Address:</label>
+  <input type="text" id="companyAddress" placeholder="Enter company address">
+
+  <label>Intern Name:</label>
+  <input type="text" id="internName" placeholder="Enter intern (student) name">
+
+  <label>Intern Address:</label>
+  <input type="text" id="internAddress" placeholder="Enter intern address">
+
+  <label>Start Date:</label>
+  <input type="date" id="startDate">
+
+  <label>End Date:</label>
+  <input type="date" id="endDate">
+
+  <label>Working Hours per week:</label>
+  <input type="text" id="hours" placeholder="e.g., 20">
+
+  <label>Monthly Stipend (₹):</label>
+  <input type="number" id="stipend" placeholder="e.g., 5000">
+
+  <div class="btn-container">
+    <button onclick="generateAgreement()">Generate Agreement</button>
+  </div>
+</div>
+
+<div id="finalAgreement" class="agreement-box" style="display:none; margin-top:30px;">
+  <h1>Internship Agreement</h1>
+  <p>This Internship Agreement (“Agreement”) is made and entered into on <strong id="dateToday"></strong> between:</p>
+
+  <p>
+    <strong>Company Name:</strong> <span id="outCompanyName"></span><br>
+    Address: <span id="outCompanyAddress"></span>
+  </p>
+
+  <p>
+    <strong>Intern (Student) Name:</strong> <span id="outInternName"></span><br>
+    Address: <span id="outInternAddress"></span>
+  </p>
+
+  <h2>1. Internship Period</h2>
+  <p>The internship shall commence on <strong id="outStartDate"></strong> and end on <strong id="outEndDate"></strong>, unless extended or terminated earlier as per this Agreement.</p>
+
+  <h2>2. Duties and Responsibilities</h2>
+  <p>The Intern agrees to perform assigned tasks diligently and responsibly, including research, documentation, and project assistance as required.</p>
+
+  <h2>3. Working Hours</h2>
+  <p>The Intern shall work for approximately <strong id="outHours"></strong> hours per week, with flexibility as approved by the supervisor.</p>
+
+  <h2>4. Stipend</h2>
+  <p>The Intern shall receive a stipend of <strong>₹<span id="outStipend"></span></strong> per month, payable via UPI or bank transfer.</p>
+
+  <h2>5. Confidentiality</h2>
+  <p>The Intern agrees to maintain confidentiality of all proprietary information during and after the internship period.</p>
+
+  <h2>6. Termination</h2>
+  <p>Either party may terminate this Agreement with a <strong>7-day written notice</strong>. The Company may terminate immediately in case of misconduct or breach of confidentiality.</p>
+
+  <h2>7. No Employment Relationship</h2>
+  <p>This internship does not constitute employment, and the Company is not obligated to offer permanent employment after completion.</p>
+
+  <h2>8. Certificate of Completion</h2>
+  <p>Upon successful completion, the Company shall issue an Internship Completion Certificate to the Intern.</p>
+
+  <h2>9. Agreement Acceptance</h2>
+  <p>By signing below, both parties agree to all terms stated in this Agreement.</p>
+
+  <table class="signature">
+    <tr>
+      <td>
+        <strong>For the Company:</strong><br><br>
+        Signature: ___________________________<br>
+        Name: <span id="outCompanyName2"></span><br>
+        Designation: _________________________<br>
+        Date: ________________________________
+      </td>
+      <td>
+        <strong>For the Intern:</strong><br><br>
+        Signature: ___________________________<br>
+        Name: <span id="outInternName2"></span><br>
+        Date: ________________________________
+      </td>
+    </tr>
+  </table>
+
+  <div class="btn-container">
+    <button onclick="window.print()">🖨️ Print Agreement</button>
+    <button onclick="downloadAgreement()">⬇️ Download Agreement</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function generateAgreement() {
+  document.getElementById("finalAgreement").style.display = "block";
+  const today = new Date().toLocaleDateString();
+
+  document.getElementById("dateToday").innerText = today;
+  document.getElementById("outCompanyName").innerText = document.getElementById("companyName").value;
+  document.getElementById("outCompanyAddress").innerText = document.getElementById("companyAddress").value;
+  document.getElementById("outInternName").innerText = document.getElementById("internName").value;
+  document.getElementById("outInternAddress").innerText = document.getElementById("internAddress").value;
+  document.getElementById("outStartDate").innerText = document.getElementById("startDate").value;
+  document.getElementById("outEndDate").innerText = document.getElementById("endDate").value;
+  document.getElementById("outHours").innerText = document.getElementById("hours").value;
+  document.getElementById("outStipend").innerText = document.getElementById("stipend").value;
+  document.getElementById("outCompanyName2").innerText = document.getElementById("companyName").value;
+  document.getElementById("outInternName2").innerText = document.getElementById("internName").value;
+
+  // Hide the input form
+  document.getElementById('inputForm').style.display = 'none';
+
+  // Auto-download as PDF
+  downloadAsPDF();
+
+  window.scrollTo({ top: document.getElementById("finalAgreement").offsetTop, behavior: 'smooth' });
+}
+
+function downloadAgreement() {
+  const content = document.getElementById("finalAgreement").outerHTML;
+  const blob = new Blob([content], { type: "text/html" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Internship_Agreement.html";
+  link.click();
+}
+
+function downloadAsPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Extract text from agreement content
+  const content = document.getElementById('finalAgreement');
+  const textContent = content.innerText || content.textContent; // Get plain text
+  const lines = doc.splitTextToSize(textContent, 180); // Split into lines for PDF
+  
+  doc.text(lines, 10, 10);
+  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  doc.save(`Internship_Agreement_${timestamp}.pdf`);
+}
+</script>
+
+</body>
+</html>

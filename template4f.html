@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sale Agreement (Single Page)</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .agreement-box {
+    background: #fff;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1, h2 {
+    color: #2a4d8f;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin: 6px 0;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 6px;
+    margin: 4px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+  }
+
+  td {
+    padding: 6px 0;
+    vertical-align: top;
+  }
+
+  .signature {
+    margin-top: 15px;
+  }
+
+  .btn-container {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  button {
+    background: #2a4d8f;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 3px;
+  }
+
+  button:hover {
+    background: #1e3873;
+  }
+
+  /* === PRINT SETTINGS === */
+  @media print {
+    body {
+      background: #fff;
+      -webkit-print-color-adjust: exact;
+    }
+    .btn-container {
+      display: none;
+    }
+    .agreement-box {
+      box-shadow: none;
+      border: none;
+      page-break-after: avoid;
+    }
+    @page {
+      size: A4;
+      margin: 0.4in;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="agreement-box">
+  <h1>Sale Agreement</h1>
+  <p>This Sale Agreement (“Agreement”) is made and entered into on 
+    <input type="date" id="date">
+    between the following parties:
+  </p>
+
+  <h2>1. Seller Details</h2>
+  <p>
+    <strong>Name:</strong> <input type="text" id="sellerName" placeholder="Seller Name"><br>
+    <strong>Address:</strong> <input type="text" id="sellerAddress" placeholder="Seller Address"><br>
+    <strong>Contact:</strong> <input type="text" id="sellerContact" placeholder="Seller Contact">
+  </p>
+
+  <h2>2. Buyer Details</h2>
+  <p>
+    <strong>Name:</strong> <input type="text" id="buyerName" placeholder="Buyer Name"><br>
+    <strong>Address:</strong> <input type="text" id="buyerAddress" placeholder="Buyer Address"><br>
+    <strong>Contact:</strong> <input type="text" id="buyerContact" placeholder="Buyer Contact">
+  </p>
+
+  <h2>3. Description of Item / Property</h2>
+  <textarea id="itemDescription" rows="3" placeholder="Describe the property, vehicle, or goods..."></textarea>
+
+  <h2>4. Sale Price and Payment Terms</h2>
+  <p>
+    Total Price: ₹<input type="number" id="salePrice" placeholder="Amount">  
+    (Rupees <input type="text" id="priceWords" placeholder="Amount in words"> only)<br>
+    Payment Mode: <input type="text" id="paymentMode" placeholder="UPI / Bank Transfer / Cash"><br>
+    Payment Due By: <input type="date" id="paymentDate">
+  </p>
+
+  <h2>5. Delivery & Transfer</h2>
+  <p>
+    Delivery Date: <input type="date" id="deliveryDate"><br>
+    Ownership shall transfer upon full payment.
+  </p>
+
+  <h2>6. Warranties & Condition</h2>
+  <p>
+    The Seller confirms the item is free from any disputes or liabilities.  
+    The Buyer accepts it in current condition.
+  </p>
+
+  <h2>7. Termination & Disputes</h2>
+  <p>
+    Disputes will be settled amicably; otherwise, under courts of  
+    <input type="text" id="jurisdiction" placeholder="City / State">.
+  </p>
+
+  <h2>8. Agreement Acceptance</h2>
+  <p>Both parties agree to all the above terms and conditions.</p>
+
+  <table class="signature">
+    <tr>
+      <td>
+        <strong>Seller Signature:</strong><br>
+        Name: _______________________<br>
+        Date: _______________________
+      </td>
+      <td>
+        <strong>Buyer Signature:</strong><br>
+        Name: _______________________<br>
+        Date: _______________________
+      </td>
+    </tr>
+  </table>
+
+  <div class="btn-container">
+    <button onclick="window.print()">🖨️ Print / Save PDF</button>
+    <button onclick="downloadAgreement()">⬇️ Download HTML</button>
+  </div>
+</div>
+
+<script>
+function downloadAgreement() {
+  const a = document.createElement('a');
+  const content = document.documentElement.outerHTML;
+  const file = new Blob([content], { type: 'text/html' });
+  a.href = URL.createObjectURL(file);
+  a.download = 'Sale_Agreement.html';
+  a.click();
+}
+</script>
+
+</body>
+</html>

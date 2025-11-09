@@ -1,0 +1,222 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agreement</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  form {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 15px;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  .agreement-box {
+    background: #fff;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #34495e;
+    margin-top: 25px;
+  }
+  .signature {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .signature div {
+    width: 45%;
+  }
+  .signature-line {
+    border-top: 1px solid #333;
+    margin-top: 60px;
+  }
+  .btn-container {
+    text-align: center;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Removed the H1 title -->
+
+<form id="partnershipForm">
+  <label>Business Name:</label>
+  <input type="text" id="businessName" required>
+
+  <label>Partner 1 Name:</label>
+  <input type="text" id="partner1" required>
+
+  <label>Partner 2 Name:</label>
+  <input type="text" id="partner2" required>
+
+  <label>Business Address:</label>
+  <input type="text" id="address" required>
+
+  <label>Capital Contribution (Partner 1):</label>
+  <input type="text" id="capital1" required>
+
+  <label>Capital Contribution (Partner 2):</label>
+  <input type="text" id="capital2" required>
+
+  <label>Profit/Loss Sharing Ratio (e.g., 60% - 40%):</label>
+  <input type="text" id="ratio" required>
+
+  <label>Duties & Responsibilities:</label>
+  <textarea id="duties" rows="3" placeholder="Describe each partner’s roles"></textarea>
+
+  <label>Dispute & Exit Clause:</label>
+  <textarea id="dispute" rows="3" placeholder="How disputes or exits will be handled"></textarea>
+
+  <button type="button" onclick="generateAgreement()">Generate Agreement</button>
+</form>
+
+<div class="agreement-box" id="agreementContent" style="display:none;">
+  <h1>Business Partnership Agreement</h1>
+
+  <p>This Partnership Agreement (“Agreement”) is made on <strong><span id="todayDate"></span></strong> between:</p>
+
+  <p><strong>Partner 1:</strong> <span id="outPartner1"></span><br>
+  <strong>Partner 2:</strong> <span id="outPartner2"></span><br>
+  Business Name: <strong><span id="outBusiness"></span></strong><br>
+  Address: <span id="outAddress"></span></p>
+
+  <h2>1. Purpose</h2>
+  <p>The Partners have agreed to jointly operate and manage the business known as <strong><span id="outBusiness2"></span></strong> for mutual benefit and growth.</p>
+
+  <h2>2. Capital Contribution</h2>
+  <p>Partner 1 will contribute <strong><span id="outCapital1"></span></strong> and Partner 2 will contribute <strong><span id="outCapital2"></span></strong> as initial capital to the business.</p>
+
+  <h2>3. Profit and Loss Sharing</h2>
+  <p>The Partners agree to share profits and losses in the ratio of <strong><span id="outRatio"></span></strong>.</p>
+
+  <h2>4. Duties and Responsibilities</h2>
+  <p><span id="outDuties"></span></p>
+
+  <h2>5. Dispute Resolution and Exit Clause</h2>
+  <p><span id="outDispute"></span></p>
+
+  <h2>6. Governing Law</h2>
+  <p>This Agreement shall be governed and interpreted according to the laws of India.</p>
+
+  <div class="signature">
+    <div>
+      <p><strong>Partner 1 Signature:</strong></p>
+      <div class="signature-line"></div>
+      <p>Date: ___________</p>
+    </div>
+    <div>
+      <p><strong>Partner 2 Signature:</strong></p>
+      <div class="signature-line"></div>
+      <p>Date: ___________</p>
+    </div>
+  </div>
+</div>
+
+<div class="btn-container" id="printBtn" style="display:none;">
+  <button onclick="window.print()">🖨️ Print / Download</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function generateAgreement() {
+  // Get form values
+  const business = document.getElementById('businessName').value;
+  const partner1 = document.getElementById('partner1').value;
+  const partner2 = document.getElementById('partner2').value;
+  const address = document.getElementById('address').value;
+  const capital1 = document.getElementById('capital1').value;
+  const capital2 = document.getElementById('capital2').value;
+  const ratio = document.getElementById('ratio').value;
+  const duties = document.getElementById('duties').value;
+  const dispute = document.getElementById('dispute').value;
+
+  // Fill output
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString();
+  document.getElementById('outPartner1').textContent = partner1;
+  document.getElementById('outPartner2').textContent = partner2;
+  document.getElementById('outBusiness').textContent = business;
+  document.getElementById('outBusiness2').textContent = business;
+  document.getElementById('outAddress').textContent = address;
+  document.getElementById('outCapital1').textContent = capital1;
+  document.getElementById('outCapital2').textContent = capital2;
+  document.getElementById('outRatio').textContent = ratio;
+  document.getElementById('outDuties').textContent = duties || "Both partners will jointly manage operations and make business decisions.";
+  document.getElementById('outDispute').textContent = dispute || "Any disputes will be resolved mutually or through arbitration as per Indian law.";
+
+  // Hide the input form
+  document.getElementById('partnershipForm').style.display = 'none';
+
+  // Show agreement
+  document.getElementById('agreementContent').style.display = 'block';
+  document.getElementById('printBtn').style.display = 'block';
+
+  // Auto-download as PDF
+  downloadAsPDF();
+
+  // Scroll to agreement
+  document.getElementById('agreementContent').scrollIntoView({behavior:'smooth'});
+}
+
+function downloadAsPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Extract text from agreement content
+  const content = document.getElementById('agreementContent');
+  const textContent = content.innerText || content.textContent; // Get plain text
+  const lines = doc.splitTextToSize(textContent, 180); // Split into lines for PDF
+  
+  doc.text(lines, 10, 10);
+  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  doc.save(`Agreement_${timestamp}.pdf`);
+}
+</script>
+
+</body>
+</html>
