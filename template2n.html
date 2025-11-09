@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Template</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: linear-gradient(to bottom, #f0f8ff, #e6e6fa); /* Light blue to lavender gradient */
+        }
+        h1 { 
+            color: #ff4500; /* Orange red for heading */
+            text-align: center; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .notes { 
+            border: 2px solid #32cd32; /* Lime green border */
+            padding: 15px; 
+            margin-bottom: 20px; 
+            background-color: white; /* Keep white for PNG */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .input-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 15px; 
+        }
+        .input-row div { 
+            flex: 1; 
+            margin-right: 10px; 
+        }
+        .input-row div:last-child { 
+            margin-right: 0; 
+        }
+        label { 
+            color: #8a2be2; /* Blue violet for labels */
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"] { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ffa500; /* Orange border */
+            border-radius: 5px; 
+            background-color: #fffacd; /* Lemon chiffon background */
+        }
+        textarea { 
+            width: 100%; 
+            height: 200px; 
+            padding: 8px; 
+            border: 1px solid #ffa500; 
+            border-radius: 5px; 
+            background-color: #fffacd; 
+            resize: vertical;
+            font-family: Arial; /* Default font */
+        }
+        .font-buttons { 
+            margin-bottom: 15px; 
+            display: flex; 
+            gap: 10px; 
+        }
+        .font-buttons button { 
+            padding: 8px 12px; 
+            border: 1px solid #ffa500; 
+            border-radius: 5px; 
+            background-color: #fffacd; 
+            cursor: pointer; 
+            font-weight: bold; 
+            color: #8a2be2; 
+        }
+        .font-buttons button:hover { 
+            background-color: #ffe4b5; /* Moccasin on hover */
+        }
+        button { 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-right: 10px; 
+            font-weight: bold; 
+            transition: background-color 0.3s;
+        }
+        button:first-of-type { 
+            background-color: #ff6347; /* Tomato red for PDF button */
+            color: white; 
+        }
+        button:first-of-type:hover { 
+            background-color: #dc143c; /* Crimson on hover */
+        }
+        button:last-of-type { 
+            background-color: #20b2aa; /* Light sea green for PNG button */
+            color: white; 
+        }
+        button:last-of-type:hover { 
+            background-color: #008b8b; /* Dark cyan on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>My Notes</h1>
+    <div class="notes" id="notesDiv">
+        <div class="input-row">
+            <div>
+                <label for="title">Title:</label><br>
+                <input type="text" id="title" placeholder="Enter note title">
+            </div>
+            <div>
+                <label for="date">Date:</label><br>
+                <input type="date" id="date">
+            </div>
+        </div>
+        
+        <label for="content">Notes:</label><br>
+        <div class="font-buttons">
+            <button onclick="changeFont('Arial')">Arial</button>
+            <button onclick="changeFont('Times New Roman')">Times New Roman</button>
+            <button onclick="changeFont('Courier New')">Courier New</button>
+            <button onclick="changeFont('Georgia')">Georgia</button>
+            <button onclick="changeFont('Verdana')">Verdana</button>
+        </div>
+        <textarea id="content" placeholder="Write your notes here..."></textarea>
+    </div>
+    
+    <button onclick="downloadAsPDF()">Download as PDF</button>
+    <button onclick="downloadAsPNG()">Download as PNG</button>
+    
+    <!-- Libraries for PDF and PNG generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <script>
+        function changeFont(font) {
+            document.getElementById('content').style.fontFamily = font;
+        }
+        
+        function downloadAsPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const content = document.getElementById('content').value;
+            
+            doc.text(`Title: ${title}`, 10, 10);
+            doc.text(`Date: ${date}`, 10, 20);
+            doc.text('Notes:', 10, 30);
+            doc.text(content, 10, 40);
+            
+            doc.save('notes.pdf');
+        }
+        
+        function downloadAsPNG() {
+            const notesDiv = document.getElementById('notesDiv');
+            
+            html2canvas(notesDiv, {
+                backgroundColor: '#ffffff' // Ensure white background
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'notes.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

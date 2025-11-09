@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official / Office Note Generator</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(180deg, #f5f7fa, #eaf1ff 70%);
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    text-align: center;
+    color: #0b63d6;
+    margin-bottom: 25px;
+  }
+
+  .form-box {
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 25px;
+    width: 95%;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d0d6e0;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  button {
+    margin-top: 20px;
+    background: #0b63d6;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(11,99,214,0.3);
+  }
+  button:hover { background: #0849a6; }
+
+  .note-output {
+    display: none;
+    background: #ffffff;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 30px 40px;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .note-header {
+    border-bottom: 2px solid #0b63d6;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+
+  .note-header h2 {
+    margin: 0;
+    color: #0b63d6;
+  }
+
+  .note-body {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .signature {
+    margin-top: 40px;
+    text-align: right;
+  }
+
+  .signature p {
+    margin: 4px 0;
+  }
+
+  .btns {
+    text-align: right;
+    margin-top: 20px;
+  }
+
+  @media print {
+    .form-box, .btns { display: none; }
+    body { background: white; }
+    .note-output { box-shadow: none; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🏢 Official / Office Note Generator</h1>
+
+<div class="form-box">
+  <label>Company / Department Name</label>
+  <input type="text" id="companyName" placeholder="Enter your company or department name" />
+
+  <label>Note Title / Subject</label>
+  <input type="text" id="noteTitle" placeholder="e.g. Weekly Report Submission" />
+
+  <label>Manager / Issuer Name</label>
+  <input type="text" id="managerName" placeholder="e.g. Mr. A. Singh" />
+
+  <label>Date</label>
+  <input type="date" id="noteDate" />
+
+  <label>Note Message</label>
+  <textarea id="noteMessage" placeholder="Enter full message to be displayed in the note"></textarea>
+
+  <button onclick="generateNote()">Generate Note</button>
+</div>
+
+<div class="note-output" id="noteOutput">
+  <div class="note-header">
+    <h2 id="outCompany"></h2>
+    <p id="outDate"></p>
+  </div>
+  <div class="note-body">
+    <h3 id="outTitle"></h3>
+    <p id="outMessage"></p>
+
+    <div class="signature">
+      <p><strong id="outManager"></strong></p>
+      <p>Project Manager</p>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+  </div>
+</div>
+
+<script>
+function generateNote() {
+  const company = document.getElementById("companyName").value.trim();
+  const title = document.getElementById("noteTitle").value.trim();
+  const manager = document.getElementById("managerName").value.trim();
+  const date = document.getElementById("noteDate").value;
+  const message = document.getElementById("noteMessage").value.trim();
+
+  if (!company || !title || !manager || !date || !message) {
+    alert("⚠️ Please fill all fields!");
+    return;
+  }
+
+  document.getElementById("outCompany").innerText = company;
+  document.getElementById("outTitle").innerText = "Subject: " + title;
+  document.getElementById("outManager").innerText = manager;
+
+  const formattedDate = new Date(date).toLocaleDateString("en-IN", {
+    day: "2-digit", month: "long", year: "numeric"
+  });
+  document.getElementById("outDate").innerText = "Date: " + formattedDate;
+
+  document.getElementById("outMessage").innerText = message;
+
+  document.getElementById("noteOutput").style.display = "block";
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+</script>
+
+</body>
+</html>

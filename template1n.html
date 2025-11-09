@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal / Reminder Note</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f7fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .note-box {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 25px 35px;
+    width: 400px;
+  }
+  h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  label {
+    font-weight: 600;
+    color: #333;
+  }
+  input, textarea {
+    width: 100%;
+    margin: 8px 0 15px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    margin-top: 8px;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+  .output {
+    margin-top: 25px;
+    padding: 15px;
+    background: #e9f5ff;
+    border-left: 5px solid #007bff;
+    border-radius: 8px;
+  }
+  #downloadBtn, #printBtn {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="note-box">
+  <h2>Personal / Reminder Note</h2>
+  
+  <label for="noteName">Note Title:</label>
+  <input type="text" id="noteName" placeholder="e.g., Backup Reminder">
+  
+  <label for="noteDetails">Note Details:</label>
+  <textarea id="noteDetails" rows="4" placeholder="Write your reminder here..."></textarea>
+  
+  <label for="noteFrom">Your Name:</label>
+  <input type="text" id="noteFrom" placeholder="e.g., Aakash">
+  
+  <button onclick="generateNote()">Generate Note</button>
+  
+  <div id="output" class="output" style="display:none;"></div>
+  
+  <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+  <button id="printBtn" onclick="window.print()">Print Note</button>
+</div>
+
+<!-- jsPDF library for PDF download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function generateNote() {
+  const title = document.getElementById("noteName").value || "Personal Reminder";
+  const details = document.getElementById("noteDetails").value || "Remember to back up all project files before meeting the client tomorrow morning.";
+  const from = document.getElementById("noteFrom").value || "Self";
+
+  const outputHTML = `
+    <h3>${title}</h3>
+    <p>${details}</p>
+    <p><strong>– ${from}</strong></p>
+  `;
+  
+  const output = document.getElementById("output");
+  output.innerHTML = outputHTML;
+  output.style.display = "block";
+  
+  document.getElementById("downloadBtn").style.display = "block";
+  document.getElementById("printBtn").style.display = "block";
+}
+
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const title = document.getElementById("noteName").value || "Personal Reminder";
+  const details = document.getElementById("noteDetails").value || "Remember to back up all project files before meeting the client tomorrow morning.";
+  const from = document.getElementById("noteFrom").value || "Self";
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text(title, 20, 20);
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const lines = doc.splitTextToSize(details, 170);
+  doc.text(lines, 20, 35);
+  
+  doc.text(`– ${from}`, 20, 80);
+  
+  doc.save(`${title}.pdf`);
+}
+</script>
+
+</body>
+</html>
