@@ -3,135 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Desktop Header</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Full desktop layout */
-        .header {
-            position: relative;
-            height: 100vh;
-            background-image: url('https://i.ibb.co/TMm8vySk/retouch-2025112102291207.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.45);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .clock {
-        font-size: 3rem;
-        margin-bottom: 25px;
-        font-weight: 700;
-        letter-spacing: 3px;
-        font-family: 'Poppins', 'Montserrat', sans-serif;
-        text-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-        .scrolling-content {
-            height: 55vh;
-            overflow-y: auto;
-            padding: 30px;
-            background-color: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(5px);
-            border-radius: 12px;
-            width: 65%;
-            max-width: 1100px;
-        }
-
-        .scrolling-content h2 {
-            margin-top: 0;
-            font-size: 1.8rem;
-        }
-
-        .scrolling-content p {
-            line-height: 1.65;
-            font-size: 1.1rem;
-        }
-
-        /* Hide scrollbar */
-        .scrolling-content::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Responsive for large desktop screens */
-        @media (min-width: 1600px) {
-            .scrolling-content {
-                width: 55%;
-                height: 60vh;
-            }
-            .clock {
-                font-size: 3.5rem;
-            }
-        }
-
-        /* Tablet adjustments */
-        @media (max-width: 900px) {
-            .scrolling-content {
-                width: 85%;
-                height: 50vh;
-            }
-        }
-
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div class="overlay">
-            <div class="clock" id="clock"></div>
-            <div class="scrolling-content">
-                <h2>About Weed (Cannabis)</h2>
-                <p>Weed, commonly known as cannabis, is a plant that has been used for various purposes throughout history. It contains compounds like THC and CBD, which can have psychoactive and medicinal effects. Cannabis is legal for recreational use in some regions and is widely studied for its potential benefits in pain relief, anxiety reduction, and more.</p>
-
-                <h2>About Wed MyDoc</h2>
-                <p>Wed MyDoc is a popular online platform where users can create free documents easily. Whether you need to generate contracts, resumes, letters, or other paperwork, Wed MyDoc offers user-friendly tools to build and customize documents without any cost.</p>
-
-            
-            </div>
-        </div>
-    </div>
-
-<script>
-    function updateClock() {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString();
-        document.getElementById('clock').textContent = timeString;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Document Creator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Playfair+Display:wght@500&family=Courier+Prime&family=Dancing+Script&family=Indie+Flower&family=Great+Vibes&family=Kaushan+Script&display=swap');
 
+        /* Dropdown Styling */
         .template-dropdown {
             position: relative;
             display: inline-block;
@@ -178,12 +54,13 @@
             scroll-behavior: smooth;
         }
 
+        /* Hero Section (Top Part) */
         .hero {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.45); /* Overlay effect from the first code */
+            background: rgba(0, 0, 0, 0.45);
             position: relative;
         }
 
@@ -191,15 +68,6 @@
             width: 90%;
             max-width: 1000px;
             text-align: center;
-        }
-
-        .clock {
-            font-size: 3rem;
-            margin-bottom: 25px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            font-family: 'Poppins', sans-serif;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         h1 {
@@ -295,14 +163,19 @@
             box-shadow: 0 0 8px #00ffff;
         }
 
+        /* --- UPDATED SECTION CSS FOR TRANSPARENCY --- */
         .section {
             padding: 80px 0;
-            background: linear-gradient(145deg, #131321, #0b0b10);
+            background: rgba(0, 0, 0, 0.4); /* Transparent Black */
+            backdrop-filter: blur(5px);      /* Glass Effect */
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .section:nth-child(even) {
-            background: linear-gradient(145deg, #0b0b10, #131321);
+            background: rgba(0, 0, 0, 0.4); /* Kept same transparency */
+            backdrop-filter: blur(5px);
         }
+        /* ------------------------------------------- */
 
         .section h2 {
             font-size: 2.5rem;
@@ -394,7 +267,6 @@
     </style>
 </head>
 <body>
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container">
       <h1><span class="highlight">Modern</span> Document Creator</h1>
@@ -408,7 +280,6 @@
         <select id="templateSelect" class="template-select">
           <option>Choose Template</option>
           <option value="agreement">Agreement</option>
-          <!-- Add more options here if needed -->
         </select>
       </div>
 
@@ -443,7 +314,6 @@
         <textarea id="editor" placeholder="Start creating your document here..."></textarea>
       </div>
       <div class="template-buttons">
-  <!-- Resume Templates -->
   <div class="template-dropdown">
     <button class="template-btn" onclick="toggleDropdown('resume')">Resume Template ▾</button>
     <div id="resumeDropdown" class="dropdown-content">
@@ -455,7 +325,6 @@
     </div>
   </div>
 
-  <!-- Invoice Templates -->
   <div class="template-dropdown">
     <button class="template-btn" onclick="toggleDropdown('invoice')">Invoice Template ▾</button>
     <div id="invoiceDropdown" class="dropdown-content">
@@ -467,7 +336,6 @@
     </div>
   </div>
 
-  <!-- Note Templates -->
   <div class="template-dropdown">
     <button class="template-btn" onclick="toggleDropdown('note')">Note Template ▾</button>
     <div id="noteDropdown" class="dropdown-content">
@@ -479,7 +347,6 @@
     </div>
   </div>
 
-  <!-- Rental Agreement Templates -->
   <div class="template-dropdown">
     <button class="template-btn" onclick="toggleDropdown('rental')">Rental Agreement Template ▾</button>
     <div id="rentalDropdown" class="dropdown-content">
@@ -491,7 +358,6 @@
     </div>
   </div>
 
-  <!-- Full Agreement Templates -->
   <div class="template-dropdown">
     <button class="template-btn" onclick="toggleDropdown('full')">Full Agreement Template ▾</button>
     <div id="fullDropdown" class="dropdown-content">
@@ -504,9 +370,6 @@
   </div>
 </div>
 
-      
-
-  <!-- How to Use Section -->
   <section class="section">
     <div class="container">
       <h2>How to Use</h2>
@@ -532,7 +395,6 @@
     </div>
   </section>
 
-  <!-- Terms and Conditions Section -->
   <section class="section">
     <div class="container">
       <h2>Terms and Conditions</h2>
@@ -558,7 +420,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <p>Powered by <a href="https://github.com" target="_blank">GitHub</a> | Enhance your documents effortlessly!</p>
@@ -566,7 +427,6 @@
     </div>
   </footer>
 
-  <!-- Scroll to Top Button -->
   <button id="scrollToTop" class="scroll-to-top">↑</button>
 
 <script>
@@ -638,12 +498,11 @@ underlineSelector.addEventListener('change', () => {
 templateSelect.addEventListener('change', () => {
   const selectedValue = templateSelect.value;
   if (selectedValue === 'agreement') {
-    // Replace 'https://yourusername.github.io/yourrepo/agreement.html' with your actual GitHub Pages URL
-    window.location.href ="agreement.html"; // ← Yahan apna GitHub link dalen
+    window.location.href ="agreement.html";
   }
-  // Add more cases for other templates if needed
-  templateSelect.selectedIndex = 0; // Reset to default after selection
+  templateSelect.selectedIndex = 0;
 });
+
 function toggleDropdown(type) {
   const dropdown = document.getElementById(`${type}Dropdown`);
   const allDropdowns = document.querySelectorAll('.dropdown-content');
@@ -654,12 +513,11 @@ function toggleDropdown(type) {
 }
 
 function openTemplate(fileName) {
-  // 👉 Update with your actual GitHub Pages base URL
   const baseURL = "https://aakash7911.github.io/mydoc/";
   window.location.href = baseURL + fileName;
 }
 
-// ✅ SAVE FUNCTION
+// SAVE FUNCTION
 saveBtn.addEventListener('click', () => {
   const text = editor.value.trim();
   if (!text) {
@@ -681,9 +539,9 @@ saveBtn.addEventListener('click', () => {
   }
 });
 
-// ✅ MAKE RESUME BUTTON (opens your GitHub load.html page)
+// MAKE RESUME BUTTON
 loadBtn.addEventListener('click', () => {
-  window.location.href = "load.html"; // ← replace with your actual GitHub link
+  window.location.href = "load.html";
 });
 
 // Scroll to top functionality
@@ -700,4 +558,4 @@ scrollToTopBtn.addEventListener('click', () => {
 });
 </script>
 </body>
-
+</html>
