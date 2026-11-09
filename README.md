@@ -1,2 +1,2 @@
 # mydoc
-freee docomant maker
+freee
